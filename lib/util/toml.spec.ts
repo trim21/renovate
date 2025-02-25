@@ -1,5 +1,5 @@
 import { codeBlock } from 'common-tags';
-import { getSingleValue, parse as parseToml } from './toml';
+import { getSingleValue, parse as parseToml, replaceString } from './toml';
 import { parseTOML } from 'toml-eslint-parser';
 
 describe('util/toml', () => {
@@ -30,10 +30,9 @@ describe('util/toml', () => {
     expect(() => parseToml(input)).toThrow(SyntaxError);
   });
 
-  it('handle AST', () => {
-    const raw = `
+  const rawToml = codeBlock`
 version = 'top level version'
-ext.version = 'version of ext'
+ext.version = "version of ext"
 
 [project]
 name = 'hello-world'
@@ -42,6 +41,9 @@ optional-deps = [
   'dep 0',
   'dep 1',
 ]
+
+[project.ext]
+name = '1 ext'
 
 [dependencies]
 urllib2.version = 'version of urllib2'
@@ -52,9 +54,6 @@ urllib3 = { version = 'version of urllib3' }
 'requests' = "version of requests"
 "vc" = 'version of vc'
 
-[project.ext]
-name = '1 ext'
-
 [[packages]]
 name = '0'
 version = '0'
@@ -64,7 +63,8 @@ name = '1'
 version = '1'
 `;
 
-    const ast = parseTOML(raw);
+  it('handle AST', () => {
+    const ast = parseTOML(rawToml);
 
     const project = getSingleValue(ast, ['project']);
     expect(project).toStrictEqual(undefined);
@@ -83,7 +83,6 @@ version = '1'
       'urllib2',
       'version',
     ]);
-
     expect(urllib2Version?.value).toStrictEqual('version of urllib2');
 
     const topLevelVersion = getSingleValue(ast, ['version']);
@@ -96,7 +95,6 @@ version = '1'
     expect(vcVersion?.value).toStrictEqual('version of vc');
 
     const extensionNameAst = getSingleValue(ast, ['project', 'ext', 'name']);
-
     expect(extensionNameAst?.value).toStrictEqual('1 ext');
 
     const urllib3AST = getSingleValue(ast, [
@@ -104,14 +102,12 @@ version = '1'
       'urllib3',
       'version',
     ]);
-
     expect(urllib3AST?.value).toStrictEqual('version of urllib3');
 
     const urllib3ExtVersionAST = getSingleValue(ast, [
       'dependencies',
       'urllib3.ext',
     ]);
-
     expect(urllib3ExtVersionAST?.value).toStrictEqual('version of urllib3.ext');
 
     const urllib2AST = getSingleValue(ast, [
@@ -119,13 +115,22 @@ version = '1'
       'urllib2',
       'version',
     ]);
-
     expect(urllib2AST?.value).toStrictEqual('version of urllib2');
 
     const projectRev = getSingleValue(ast, ['project', 'rev']);
-
-    console.log(projectRev);
-    expect(projectRev?.kind).toStrictEqual('integer');
     expect(projectRev?.value).toStrictEqual(3);
+  });
+
+  it('replace string content', () => {
+    expect(replaceString(rawToml, ['project', 'name'], () => 'hello')).toBe(
+      rawToml.replace("name = 'hello-world'", "name = 'hello'"),
+    );
+
+    expect(replaceString(rawToml, ['ext', 'version'], () => 'hello')).toBe(
+      rawToml.replace(
+        `ext.version = "version of ext"`,
+        `ext.version = "hello"`,
+      ),
+    );
   });
 });

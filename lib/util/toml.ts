@@ -37,7 +37,7 @@ export function getSingleValue(
 
   if (path.length === 0) {
     if (ast.type !== 'TOMLValue') {
-      return undefined;
+      return;
     }
     return ast;
   }
@@ -59,8 +59,6 @@ export function getSingleValue(
                 return o;
               }
             }
-
-            return;
           }
         }
       } else if (body.type === 'TOMLKeyValue') {
@@ -127,7 +125,7 @@ export function replaceString(
 
   if (node.style === 'basic') {
     newStr = JSON.stringify(newValue);
-  } else if (newValue.includes('')) {
+  } else if (newValue.includes("'")) {
     newStr = JSON.stringify(newValue);
   } else {
     newStr = "'" + newValue + "'";

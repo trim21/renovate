@@ -1,19 +1,18 @@
-import { z } from 'zod';
-import { LooseRecord, Toml, Yaml } from '../../../util/schema-utils';
-import { PackageDependency } from '../types';
-
-import { id as pep440VersionID } from '../../versioning/pep440/';
-import { id as gitRefVersionID } from '../../versioning/git';
-import { PypiDatasource } from '../../datasource/pypi';
 import is from '@sindresorhus/is';
+import { z } from 'zod';
 import { isNotNullOrUndefined } from '../../../util/array';
+import { LooseRecord, Toml, Yaml } from '../../../util/schema-utils';
+import { PypiDatasource } from '../../datasource/pypi';
+import { id as gitRefVersionID } from '../../versioning/git';
+import { id as pep440VersionID } from '../../versioning/pep440/';
+import type { PackageDependency } from '../types';
 
-export type PixiManagerData = {
+export interface PixiManagerData {
   /**
    * object path to version string
    */
-  path: Array<string | number>;
-};
+  path: (string | number)[];
+}
 
 export interface PixiPackageDependency extends PackageDependency {
   managerData: PixiManagerData;
@@ -21,7 +20,7 @@ export interface PixiPackageDependency extends PackageDependency {
 
 function prependObjectPath(
   item: PixiPackageDependency,
-  path: Array<string | number>,
+  path: (string | number)[],
 ): PixiPackageDependency {
   return {
     ...item,
