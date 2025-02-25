@@ -1,6 +1,5 @@
 import { codeBlock } from 'common-tags';
 import { getSingleValue, parse as parseToml } from './toml';
-import assert from 'assert';
 import { parseTOML } from 'toml-eslint-parser';
 
 describe('util/toml', () => {
@@ -68,16 +67,16 @@ version = '1'
     const ast = parseTOML(raw);
 
     const project = getSingleValue(ast, ['project']);
-    assert.strictEqual(project, undefined);
+    expect(project).toStrictEqual(undefined);
 
     const optionalDeps = getSingleValue(ast, ['project', 'optional-deps']);
-    assert.strictEqual(optionalDeps, undefined);
+    expect(optionalDeps).toStrictEqual(undefined);
 
     const inlineArray = getSingleValue(ast, ['project', 'optional-deps', 1]);
-    assert.strictEqual(inlineArray?.value, 'dep 1');
+    expect(inlineArray?.value).toStrictEqual('dep 1');
 
     const topLevelArray = getSingleValue(ast, ['packages', 1, 'version']);
-    assert.strictEqual(topLevelArray?.value, '1');
+    expect(topLevelArray?.value).toStrictEqual('1');
 
     const urllib2Version = getSingleValue(ast, [
       'dependencies',
@@ -85,20 +84,20 @@ version = '1'
       'version',
     ]);
 
-    assert.strictEqual(urllib2Version?.value, 'version of urllib2');
+    expect(urllib2Version?.value).toStrictEqual('version of urllib2');
 
     const topLevelVersion = getSingleValue(ast, ['version']);
-    assert.strictEqual(topLevelVersion?.value, 'top level version');
+    expect(topLevelVersion?.value).toStrictEqual('top level version');
 
     const topLevelExtVersion = getSingleValue(ast, ['ext', 'version']);
-    assert.strictEqual(topLevelExtVersion?.value, 'version of ext');
+    expect(topLevelExtVersion?.value).toStrictEqual('version of ext');
 
     const vcVersion = getSingleValue(ast, ['dependencies', 'vc']);
-    assert.strictEqual(vcVersion?.value, 'version of vc');
+    expect(vcVersion?.value).toStrictEqual('version of vc');
 
     const extensionNameAst = getSingleValue(ast, ['project', 'ext', 'name']);
 
-    assert.strictEqual(extensionNameAst?.value, '1 ext');
+    expect(extensionNameAst?.value).toStrictEqual('1 ext');
 
     const urllib3AST = getSingleValue(ast, [
       'dependencies',
@@ -106,14 +105,14 @@ version = '1'
       'version',
     ]);
 
-    assert.strictEqual(urllib3AST?.value, 'version of urllib3');
+    expect(urllib3AST?.value).toStrictEqual('version of urllib3');
 
     const urllib3ExtVersionAST = getSingleValue(ast, [
       'dependencies',
       'urllib3.ext',
     ]);
 
-    assert.strictEqual(urllib3ExtVersionAST?.value, 'version of urllib3.ext');
+    expect(urllib3ExtVersionAST?.value).toStrictEqual('version of urllib3.ext');
 
     const urllib2AST = getSingleValue(ast, [
       'dependencies',
@@ -121,12 +120,12 @@ version = '1'
       'version',
     ]);
 
-    assert.strictEqual(urllib2AST?.value, 'version of urllib2');
+    expect(urllib2AST?.value).toStrictEqual('version of urllib2');
 
     const projectRev = getSingleValue(ast, ['project', 'rev']);
 
     console.log(projectRev);
-    assert.strictEqual(projectRev?.kind, 'integer');
-    assert.strictEqual(projectRev?.value, 3);
+    expect(projectRev?.kind).toStrictEqual('integer');
+    expect(projectRev?.value).toStrictEqual(3);
   });
 });
