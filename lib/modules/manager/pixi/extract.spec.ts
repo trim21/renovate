@@ -230,40 +230,40 @@ describe('modules/manager/pixi/extract', () => {
       expect(
         await extractPackageFile(fullPixiConfig, 'pixi.toml'),
       ).toMatchObject({
-        fileFormat: 'toml',
-        lockFiles: [],
         deps: [
           {
             currentValue: '*',
-            versioning: 'pep440',
             datasource: 'pypi',
+            depName: 'requests',
             managerData: {
               path: ['pypi-dependencies', 'requests'],
             },
-            depName: 'requests',
+            versioning: 'pep440',
           },
           {
             currentValue: '*',
-            versioning: 'pep440',
             datasource: 'pypi',
+            depName: 'requests2',
             managerData: {
               path: ['pypi-dependencies', 'requests2', 'version'],
             },
-            depName: 'requests2',
+            versioning: 'pep440',
           },
           {
             currentValue: '*',
-            versioning: 'pep440',
             datasource: 'pypi',
+            depName: 'flake8',
+            depType: 'lint',
             managerData: {
               path: ['feature', 'lint', 'pypi-dependencies', 'flake8'],
             },
-            depName: 'flake8',
+            versioning: 'pep440',
           },
           {
             currentValue: '==25.*',
-            versioning: 'pep440',
             datasource: 'pypi',
+            depName: 'black',
+            depType: 'lint',
             managerData: {
               path: [
                 'feature',
@@ -274,33 +274,34 @@ describe('modules/manager/pixi/extract', () => {
                 'black',
               ],
             },
-            depName: 'black',
+            versioning: 'pep440',
           },
           {
             currentValue: '>0',
-            versioning: 'pep440',
             datasource: 'pypi',
+            depName: 'black',
+            depType: 'test',
             managerData: {
               path: ['feature', 'test', 'pypi-dependencies', 'black'],
             },
-            depName: 'black',
+            versioning: 'pep440',
           },
           {
             currentValue: '0106aced5faa299e6ede89d1230bd6784f2c3660',
-            sourceUrl: 'https://github.com/psf/requests.git',
+            depName: 'requests',
+            depType: 'test',
             gitRef: true,
-            versioning: 'git',
             managerData: {
               path: ['feature', 'test', 'pypi-dependencies', 'requests', 'ref'],
             },
-            depName: 'requests',
+            sourceUrl: 'https://github.com/psf/requests.git',
+            versioning: 'git',
           },
           {
             currentValue: 'v0.3.0',
-            sourceUrl:
-              'https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git',
+            depName: 'pytest-github-actions-annotate-failures',
+            depType: 'test',
             gitRef: true,
-            versioning: 'git',
             managerData: {
               path: [
                 'feature',
@@ -310,9 +311,28 @@ describe('modules/manager/pixi/extract', () => {
                 'ref',
               ],
             },
-            depName: 'pytest-github-actions-annotate-failures',
+            sourceUrl:
+              'https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git',
+            versioning: 'git',
+          },
+          {
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'urllib3',
+            managerData: {
+              path: [
+                'target',
+                'win-64',
+                'pypi-dependencies',
+                'urllib3',
+                'version',
+              ],
+            },
+            versioning: 'pep440',
           },
         ],
+        fileFormat: 'toml',
+        lockFiles: [],
       });
     });
   });
