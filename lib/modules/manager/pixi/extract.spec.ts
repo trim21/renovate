@@ -106,7 +106,7 @@ numpy = { version = "*", build = "py312*" }
 requests = '*'
 requests2 = {version = '*'}
 
-[target.win-64]
+[target.win-64.pypi-dependencies]
 
 [environments]
 lint = { features = ['lint'] }
