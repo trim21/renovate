@@ -42,6 +42,8 @@ optional-deps = [
   'dep 1',
 ]
 
+info = {}
+
 [project.ext]
 name = '1 ext'
 
@@ -119,6 +121,9 @@ version = '1'
 
     const projectRev = getSingleValue(ast, ['project', 'rev']);
     expect(projectRev?.value).toStrictEqual(3);
+
+    expect(getSingleValue(ast, ['project'])).toBeNull();
+    expect(getSingleValue(ast, ['project', 'info'])).toBeNull();
   });
 
   it('replace string content', () => {
@@ -126,11 +131,28 @@ version = '1'
       rawToml.replace("name = 'hello-world'", "name = 'hello'"),
     );
 
+    expect(
+      replaceString(
+        rawToml,
+        ['project', 'name'],
+        () => "string with a' single quote",
+      ),
+    ).toBe(
+      rawToml.replace(
+        "name = 'hello-world'",
+        `name = "string with a' single quote"`,
+      ),
+    );
+
     expect(replaceString(rawToml, ['ext', 'version'], () => 'hello')).toBe(
       rawToml.replace(
         `ext.version = "version of ext"`,
         `ext.version = "hello"`,
       ),
+    );
+
+    expect(replaceString(rawToml, ['project', 'rev'], () => 'hello')).toBe(
+      rawToml,
     );
   });
 });
