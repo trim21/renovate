@@ -107,6 +107,7 @@ requests = '*'
 requests2 = {version = '*'}
 
 [target.win-64.pypi-dependencies]
+urllib3 = {version = '*'}
 
 [environments]
 lint = { features = ['lint'] }
