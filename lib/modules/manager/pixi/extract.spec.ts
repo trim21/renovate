@@ -171,7 +171,23 @@ describe('modules/manager/pixi/extract', () => {
       expect(
         await extractPackageFile(pyprojectToml, 'pyproject.toml'),
       ).toMatchObject({
-        deps: [],
+        deps: [
+          {
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'requests',
+            managerData: {
+              path: [
+                'tool',
+                'pixi',
+                'pypi-dependencies',
+                'requests',
+                'version',
+              ],
+            },
+            versioning: 'pep440',
+          },
+        ],
         fileFormat: 'toml',
         lockFiles: ['pixi.lock'],
       });

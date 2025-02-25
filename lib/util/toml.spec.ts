@@ -122,8 +122,8 @@ version = '1'
     const projectRev = getSingleValue(ast, ['project', 'rev']);
     expect(projectRev?.value).toStrictEqual(3);
 
-    expect(getSingleValue(ast, ['project'])).toBeNull();
-    expect(getSingleValue(ast, ['project', 'info'])).toBeNull();
+    expect(getSingleValue(ast, ['project'])).toBeUndefined();
+    expect(getSingleValue(ast, ['project', 'info'])).toBeUndefined();
   });
 
   it('replace string content', () => {
