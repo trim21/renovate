@@ -1,6 +1,6 @@
 import { codeBlock } from 'common-tags';
-import { getSingleValue, parse as parseToml, replaceString } from './toml';
 import { parseTOML } from 'toml-eslint-parser';
+import { getSingleValue, parse as parseToml, replaceString } from './toml';
 
 describe('util/toml', () => {
   it('works', () => {

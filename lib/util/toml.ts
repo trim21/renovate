@@ -1,5 +1,5 @@
-import { type AST, getStaticTOMLValue, parseTOML } from 'toml-eslint-parser';
 import is from '@sindresorhus/is';
+import { type AST, getStaticTOMLValue, parseTOML } from 'toml-eslint-parser';
 
 export function parse(input: string): unknown {
   const ast = parseTOML(input);
