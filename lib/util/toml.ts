@@ -77,18 +77,7 @@ export function getSingleValue(
     return;
   }
 
-  if (ast.type === 'TOMLTable') {
-    for (const item of ast.body) {
-      const o = isKey(item, path);
-      if (o) {
-        return o;
-      }
-    }
-
-    return;
-  }
-
-  if (ast.type === 'TOMLInlineTable') {
+  if (ast.type === 'TOMLTable' || ast.type === 'TOMLInlineTable') {
     for (const item of ast.body) {
       const o = isKey(item, path);
       if (o) {
