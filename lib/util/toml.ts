@@ -15,12 +15,14 @@ function isKey(ast: AST.TOMLKeyValue, path: (string | number)[]) {
     ast.key.keys.every((key, index) => {
       return (
         (key.type === 'TOMLBare' && key.name === path[index]) ||
-        (key.type === 'TOMLQuoted' && key.value == path[index])
+        (key.type === 'TOMLQuoted' && key.value === path[index])
       );
     })
   ) {
     return getSingleValue(ast.value, path.slice(ast.key.keys.length));
   }
+
+  return;
 }
 
 /**
@@ -106,7 +108,7 @@ export function getSingleValue(
  */
 export function replaceString(
   toml: string,
-  path: Array<string | number>,
+  path: (string | number)[],
   updater: (currentValue: string) => string,
 ): string {
   const node = getSingleValue(parseTOML(toml), path);

@@ -1,7 +1,7 @@
-import type { UpdateDependencyConfig } from '../types';
-import { PixiManagerData } from './schema';
-import { replaceString as replaceTomlString } from '../../../util/toml';
 import is from '@sindresorhus/is';
+import { replaceString as replaceTomlString } from '../../../util/toml';
+import type { UpdateDependencyConfig } from '../types';
+import type { PixiManagerData } from './schema';
 
 type PixiUpgrade = UpdateDependencyConfig<PixiManagerData>;
 
