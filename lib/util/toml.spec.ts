@@ -124,6 +124,9 @@ version = '1'
 
     expect(getSingleValue(ast, ['project'])).toBeUndefined();
     expect(getSingleValue(ast, ['project', 'info'])).toBeUndefined();
+    expect(
+      getSingleValue(ast, ['project', 'info', 'not-exist']),
+    ).toBeUndefined();
   });
 
   it('replace string content', () => {

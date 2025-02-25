@@ -33,13 +33,9 @@ function isKey(
  * return undefined if the path point to a compose value (object/array)
  */
 export function getSingleValue(
-  ast: AST.TOMLNode | undefined,
+  ast: AST.TOMLNode,
   path: (string | number)[],
 ): AST.TOMLValue | undefined {
-  if (typeof ast === 'undefined') {
-    return;
-  }
-
   if (path.length === 0) {
     if (ast.type !== 'TOMLValue') {
       return;
