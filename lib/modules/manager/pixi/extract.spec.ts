@@ -22,6 +22,7 @@ platforms = ["osx-arm64"]
 
 [tool.pixi.pypi-dependencies]
 pixi_py = { path = ".", editable = true }
+requests = { version = '*'  }
 
 [tool.pixi.tasks]
 `;
@@ -103,6 +104,9 @@ numpy = { version = "*", build = "py312*" }
 # scipy = { version = "==1.15.1", channel = "anaconda" }
 [pypi-dependencies]
 requests = '*'
+requests2 = {version = '*'}
+
+[target.win-64]
 
 [environments]
 lint = { features = ['lint'] }
@@ -173,6 +177,35 @@ describe('modules/manager/pixi/extract', () => {
       });
     });
 
+    it('returns package of pyproject.toml tool.pixi section', async () => {
+      fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
+      fs.localPathExists.mockReturnValueOnce(Promise.resolve(false));
+
+      expect(
+        await extractPackageFile(pyprojectToml, 'pyproject.toml'),
+      ).toMatchObject({
+        deps: [
+          {
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'requests',
+            managerData: {
+              path: [
+                'tool',
+                'pixi',
+                'pypi-dependencies',
+                'requests',
+                'version',
+              ],
+            },
+            versioning: 'pep440',
+          },
+        ],
+        fileFormat: 'toml',
+        lockFiles: [],
+      });
+    });
+
     it('returns parse pixi.toml with features', async () => {
       fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
       fs.localPathExists.mockReturnValueOnce(Promise.resolve(false));
@@ -191,6 +224,15 @@ describe('modules/manager/pixi/extract', () => {
               path: ['pypi-dependencies', 'requests'],
             },
             depName: 'requests',
+          },
+          {
+            currentValue: '*',
+            versioning: 'pep440',
+            datasource: 'pypi',
+            managerData: {
+              path: ['pypi-dependencies', 'requests2', 'version'],
+            },
+            depName: 'requests2',
           },
           {
             currentValue: '*',

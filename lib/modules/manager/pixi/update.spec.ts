@@ -38,6 +38,16 @@ describe('modules/manager/pixi/update', () => {
       expect(actual).toEqual(content);
     });
 
+    it('no ops without object path', () => {
+      const actual = projectUpdater.updateDependency({
+        fileContent: content,
+        upgrade: {
+          newValue: '0.0.3',
+        },
+      });
+      expect(actual).toEqual(content);
+    });
+
     // it('updates', () => {
     //   const { bumpedContent } = projectUpdater.bumpPackageVersion(
     //     content,
