@@ -57,6 +57,37 @@ iris = ">=3.11.1,<4"
 
 const pyprojectWithoutPixi = `
 [project]
+description = "non pixi managed project, should match nothing"
+authors = [{ name = "ORGNAME", email = "orgname@orgname.org" }]
+classifiers = ["Development Status :: 1 - Planning"]
+dependencies = ["numpy"]
+dynamic = ["version"]
+license.file = "LICENSE"
+name = "foo"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = ["pytest >=6", "pytest-cov >=3", "pre-commit"]
+test = ["pytest >=6", "pytest-cov >=3", "mypy"]
+
+[project.urls]
+Homepage = "https://github.com/ORGNAME/foo"
+
+[tool.setuptools_scm]
+write_to = "src/foo/_version.py"
+
+[tool.pytest.ini_options]
+addopts = ["-ra", "--showlocals", "--strict-markers", "--strict-config"]
+filterwarnings = ["error"]
+log_cli_level = "INFO"
+minversion = "6.0"
+testpaths = ["tests"]
+xfail_strict = true
+`;
+
+const fullPixiConfig = `
+[project]
 authors = ["Trim21 <trim21.me@gmail.com>"]
 channels = ["conda-forge"]
 name = "pixi"
@@ -71,6 +102,7 @@ numpy = { version = "*", build = "py312*" }
 
 # scipy = { version = "==1.15.1", channel = "anaconda" }
 [pypi-dependencies]
+requests = '*'
 
 [environments]
 lint = { features = ['lint'] }
@@ -79,7 +111,7 @@ scipy = { features = ['scipy'] }
 
 [feature.scipy]
 channels = ["anaconda"]
-dependencies = { scipy = "==1.15.1" }
+dependencies = { scipy = { version = "==1.15.1", channel = "anaconda" } }
 target.win-64 = { dependencies = { matplotlib = "==3.10.0" } }
 
 [feature.lint.dependencies]
@@ -92,6 +124,7 @@ flake8 = '*'
 black = '==25.*'
 
 [feature.test.pypi-dependencies]
+black = '>0'
 urllib3 = { url = "https://github.com/urllib3/urllib3/releases/download/2.3.0/urllib3-2.3.0-py3-none-any.whl" }
 pytest = { git = "https://github.com/pytest-dev/pytest.git" }
 requests = { git = "https://github.com/psf/requests.git", rev = "0106aced5faa299e6ede89d1230bd6784f2c3660" }
@@ -137,6 +170,90 @@ describe('modules/manager/pixi/extract', () => {
         deps: [],
         fileFormat: 'toml',
         lockFiles: ['pixi.lock'],
+      });
+    });
+
+    it('returns parse pixi.toml with features', async () => {
+      fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
+      fs.localPathExists.mockReturnValueOnce(Promise.resolve(false));
+
+      expect(
+        await extractPackageFile(fullPixiConfig, 'pixi.toml'),
+      ).toMatchObject({
+        fileFormat: 'toml',
+        lockFiles: [],
+        deps: [
+          {
+            currentValue: '*',
+            versioning: 'pep440',
+            datasource: 'pypi',
+            managerData: {
+              path: ['pypi-dependencies', 'requests'],
+            },
+            depName: 'requests',
+          },
+          {
+            currentValue: '*',
+            versioning: 'pep440',
+            datasource: 'pypi',
+            managerData: {
+              path: ['feature', 'lint', 'pypi-dependencies', 'flake8'],
+            },
+            depName: 'flake8',
+          },
+          {
+            currentValue: '==25.*',
+            versioning: 'pep440',
+            datasource: 'pypi',
+            managerData: {
+              path: [
+                'feature',
+                'lint',
+                'target',
+                'win-64',
+                'pypi-dependencies',
+                'black',
+              ],
+            },
+            depName: 'black',
+          },
+          {
+            currentValue: '>0',
+            versioning: 'pep440',
+            datasource: 'pypi',
+            managerData: {
+              path: ['feature', 'test', 'pypi-dependencies', 'black'],
+            },
+            depName: 'black',
+          },
+          {
+            currentValue: '0106aced5faa299e6ede89d1230bd6784f2c3660',
+            sourceUrl: 'https://github.com/psf/requests.git',
+            gitRef: true,
+            versioning: 'git',
+            managerData: {
+              path: ['feature', 'test', 'pypi-dependencies', 'requests', 'ref'],
+            },
+            depName: 'requests',
+          },
+          {
+            currentValue: 'v0.3.0',
+            sourceUrl:
+              'https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git',
+            gitRef: true,
+            versioning: 'git',
+            managerData: {
+              path: [
+                'feature',
+                'test',
+                'pypi-dependencies',
+                'pytest-github-actions-annotate-failures',
+                'ref',
+              ],
+            },
+            depName: 'pytest-github-actions-annotate-failures',
+          },
+        ],
       });
     });
   });

@@ -52,7 +52,7 @@ export async function extractPackageFile(
 
   return {
     lockFiles,
-    deps: [], // TODO
+    deps: config.pypi,
     fileFormat: 'toml',
   };
 }

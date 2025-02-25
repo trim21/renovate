@@ -1,59 +1,207 @@
 import { z } from 'zod';
-import { Toml, Yaml } from '../../../util/schema-utils';
+import { LooseRecord, Toml, Yaml } from '../../../util/schema-utils';
 import { PackageDependency } from '../types';
 
 import { id as pep440VersionID } from '../../versioning/pep440/';
 import { id as gitRefVersionID } from '../../versioning/git';
 import { PypiDatasource } from '../../datasource/pypi';
+import is from '@sindresorhus/is';
+import { isNotNullOrUndefined } from '../../../util/array';
+
+export type PixiManagerData = {
+  /**
+   * object path to version string
+   */
+  path: Array<string | number>;
+};
+
+export interface PixiPackageDependency extends PackageDependency {
+  managerData: PixiManagerData;
+}
+
+function prependObjectPath(
+  item: PixiPackageDependency,
+  path: Array<string | number>,
+): PixiPackageDependency {
+  return {
+    ...item,
+    managerData: {
+      path: [...path, ...item.managerData.path],
+    },
+  };
+}
+
+const pypiDependencies = z
+  .record(
+    z.string(),
+    z.union([
+      z.string().transform((version) => {
+        return {
+          currentValue: version,
+          versioning: pep440VersionID,
+          datasource: PypiDatasource.id,
+          managerData: { path: [] },
+        } satisfies PixiPackageDependency;
+      }),
+      z.object({ version: z.string() }).transform(({ version }) => {
+        return {
+          currentValue: version,
+          versioning: pep440VersionID,
+          datasource: PypiDatasource.id,
+          managerData: { path: ['version'] },
+        } satisfies PixiPackageDependency;
+      }),
+      z
+        .object({ git: z.string(), rev: z.optional(z.string()) })
+        .transform(({ git, rev }) => {
+          // empty ref default to HEAD, so do we not need to do anything
+          if (!rev) {
+            return null;
+          }
+
+          return {
+            currentValue: rev,
+            sourceUrl: git,
+            gitRef: true,
+            versioning: gitRefVersionID,
+            managerData: { path: ['ref'] },
+          } satisfies PixiPackageDependency;
+        }),
+      // z.object({ url: z.string() }).transform(() => null),
+      z.any().transform(() => null),
+    ]),
+  )
+  .transform((val) => {
+    return Object.entries(val)
+      .map(([depName, config]) => {
+        if (is.nullOrUndefined(config)) {
+          return;
+        }
+
+        return prependObjectPath(
+          {
+            ...config,
+            depName,
+          },
+          [depName],
+        );
+      })
+      .filter((dep) => isNotNullOrUndefined(dep));
+  });
+
+const Targets = LooseRecord(
+  z.string(),
+  z.object({
+    'pypi-dependencies': z.optional(pypiDependencies).transform((val) => {
+      return (
+        val?.map((item) => prependObjectPath(item, ['pypi-dependencies'])) ?? []
+      );
+    }),
+  }),
+).transform((val) => {
+  const pypi: PixiPackageDependency[] = [];
+  for (const [key, value] of Object.entries(val)) {
+    pypi.push(
+      ...value['pypi-dependencies'].map((item) =>
+        prependObjectPath(item, [key]),
+      ),
+    );
+  }
+
+  return { pypi };
+});
 
 /**
  * config of `pixi.toml` of `tool.pixi` of `pyproject.toml`
  */
-export const PixiConfigSchema = z.union([z.object({}), z.null()]).default(null);
+export const PixiConfigSchema = z
+  .object({
+    'pypi-dependencies': z
+      .optional(pypiDependencies)
+      .default({})
+      .transform((val) => {
+        return val.map((item) =>
+          prependObjectPath(item, ['pypi-dependencies']),
+        );
+      }),
+    target: z
+      .optional(Targets)
+      .default({})
+      .transform(({ pypi }) => {
+        return {
+          pypi: pypi.map((item) => prependObjectPath(item, ['target'])),
+        };
+      }),
+    feature: LooseRecord(
+      z.string(),
+      z.object({
+        'pypi-dependencies': z
+          .optional(pypiDependencies)
+          .default({})
+          .transform((val) => {
+            return val.map((item) =>
+              prependObjectPath(item, ['pypi-dependencies']),
+            );
+          }),
+        target: z
+          .optional(Targets)
+          .default({})
+          .transform(({ pypi }) => {
+            return {
+              pypi: pypi.map((item) => prependObjectPath(item, ['target'])),
+            };
+          }),
+      }),
+    )
+      .default({})
+      .transform((features) => {
+        const result: PixiPackageDependency[] = [];
 
-const pypiDependencies = z.record(
-  z.string(),
-  z.union([
-    z.string().transform((version) => {
-      return {
-        currentValue: version,
-        versioning: pep440VersionID,
-        datasource: PypiDatasource.id,
-      } satisfies PackageDependency;
-    }),
-    z.object({ version: z.string() }).transform(({ version }) => {
-      return {
-        currentValue: version,
-        versioning: pep440VersionID,
-        datasource: PypiDatasource.id,
-      } satisfies PackageDependency;
-    }),
-    z
-      .object({ git: z.string(), ref: z.optional(z.string()) })
-      .transform(({ git, ref }) => {
-        // empty ref default to HEAD, so do we not need to do anything
-        if (!ref) {
-          return null;
+        for (const [
+          feature,
+          { target, 'pypi-dependencies': pypi },
+        ] of Object.entries(features)) {
+          result.push(
+            ...pypi.map((item) => {
+              return {
+                ...prependObjectPath(item, ['feature', feature]),
+                depType: feature,
+              };
+            }),
+          );
+
+          result.push(
+            ...target.pypi.map((item) => {
+              return {
+                ...prependObjectPath(item, ['feature', feature]),
+                depType: feature,
+              };
+            }),
+          );
         }
 
-        return {
-          currentValue: ref,
-          sourceUrl: git,
-          gitRef: true,
-          versioning: gitRefVersionID,
-        } satisfies PackageDependency;
+        return { pypi: result };
       }),
-    z.object({ url: z.string() }).transform(() => null),
-    z.any().transform(() => null),
-  ]),
-);
+  })
+  .transform((val) => {
+    const deps = val['pypi-dependencies']
+      .concat(val.feature.pypi)
+      .concat(val.target.pypi);
+    return { pypi: deps };
+  });
 
 export const PyprojectSchema = z
   .object({
-    tool: z.object({ pixi: PixiConfigSchema }),
+    tool: z.object({ pixi: z.optional(PixiConfigSchema) }),
   })
   .transform(({ tool: { pixi } }) => {
-    return pixi;
+    if (!pixi) {
+      return;
+    }
+
+    return {
+      pypi: pixi.pypi.map((item) => prependObjectPath(item, ['tool', 'pixi'])),
+    };
   });
 
 export const PyprojectToml = Toml.pipe(PyprojectSchema);
