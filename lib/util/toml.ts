@@ -1,12 +1,15 @@
-import is from '@sindresorhus/is';
 import { type AST, getStaticTOMLValue, parseTOML } from 'toml-eslint-parser';
+import is from '@sindresorhus/is';
 
 export function parse(input: string): unknown {
   const ast = parseTOML(input);
   return getStaticTOMLValue(ast);
 }
 
-function isKey(ast: AST.TOMLKeyValue, path: (string | number)[]) {
+function isKey(
+  ast: AST.TOMLKeyValue,
+  path: (string | number)[],
+): AST.TOMLValue | undefined {
   if (ast.key.keys.length > path.length) {
     return;
   }
