@@ -37,7 +37,7 @@ export class CondaDatasource extends Datasource {
     registryUrl,
     packageName,
   }: GetReleasesConfig): Promise<ReleaseResult | null> {
-    logger.trace({ registryUrl, packageName }, 'fetching conda package');
+    logger.debug({ registryUrl, packageName }, 'fetching conda package');
 
     if (!registryUrl) {
       return null;
