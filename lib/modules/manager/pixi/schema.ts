@@ -99,6 +99,7 @@ const condaDependencies = z
           currentValue: version,
           versioning: condaVersion.id,
           datasource: CondaDatasource.id,
+          depType: 'dependencies',
           managerData: { path: [] },
         } satisfies PixiPackageDependency;
       }),
@@ -110,6 +111,7 @@ const condaDependencies = z
             versioning: condaVersion.id,
             datasource: CondaDatasource.id,
             managerData: { path: ['version'] },
+            depType: 'dependencies',
             registryUrls: channel ? [channel] : [],
           } satisfies PixiPackageDependency;
         }),
@@ -252,28 +254,17 @@ export const PixiConfigSchema = z
           };
         });
 
-      const defaultChannel = project.channels[0];
+      const conda = val.dependencies.map((item) => {
+        // add channels
+        if (item.registryUrls?.length !== 0) {
+          return item;
+        }
 
-      let conda = val.dependencies.map((item) => {
         return {
           ...item,
-          depType: 'dependencies',
+          registryUrls: project.channels,
         };
       });
-
-      if (defaultChannel) {
-        conda = conda.map((item) => {
-          // add channels
-          if (!item.registryUrls) {
-            return {
-              ...item,
-              packageName: defaultChannel + '/' + item.packageName,
-            };
-          }
-
-          return item;
-        });
-      }
 
       return {
         conda,
