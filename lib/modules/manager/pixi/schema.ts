@@ -2,10 +2,11 @@ import is from '@sindresorhus/is';
 import { z } from 'zod';
 import { isNotNullOrUndefined } from '../../../util/array';
 import { LooseRecord, Toml, Yaml } from '../../../util/schema-utils';
-import { PypiDatasource } from '../../datasource/pypi';
-import { id as gitRefVersionID } from '../../versioning/git';
-import * as condaVersion from '../../versioning/conda/';
 import { CondaDatasource } from '../../datasource/conda/';
+import { defaultRegistryUrl as defaultCondaRegistryAPi } from '../../datasource/conda/common';
+import { PypiDatasource } from '../../datasource/pypi';
+import * as condaVersion from '../../versioning/conda/';
+import { id as gitRefVersionID } from '../../versioning/git';
 import { id as pep440VersionID } from '../../versioning/pep440/';
 import type { PackageDependency } from '../types';
 
@@ -256,13 +257,22 @@ export const PixiConfigSchema = z
 
       const conda = val.dependencies.map((item) => {
         // add channels
-        if (item.registryUrls?.length !== 0) {
+        if (
+          isNotNullOrUndefined(item.registryUrls) &&
+          item.registryUrls.length !== 0
+        ) {
           return item;
         }
 
         return {
           ...item,
-          registryUrls: project.channels,
+          registryUrls: project.channels.slice().map((item) => {
+            if (item.startsWith('http://') || item.startsWith('https://')) {
+              return item + '/';
+            }
+
+            return defaultCondaRegistryAPi + item + '/';
+          }),
         };
       });
 
@@ -275,12 +285,12 @@ export const PixiConfigSchema = z
 
 export const PyprojectSchema = z
   .object({
-    tool: z.object({ pixi: z.optional(PixiConfigSchema) }).optional(),
+    tool: z.object({ pixi: PixiConfigSchema.optional() }).optional(),
   })
   .default({})
   .transform(({ tool: { pixi } = {} }) => {
     if (!pixi) {
-      return;
+      return null;
     }
 
     return {
