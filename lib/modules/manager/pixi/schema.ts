@@ -299,16 +299,19 @@ export const PixiConfigSchema = z
           ),
         )
         .map((item) => {
+          const channels = item.channels ? orderChannels(item.channels) : [];
           if (item.channel) {
             return {
               ...item,
+              channels,
               registryUrls: [channelToRegistryUrl(item.channel)],
             };
           }
 
-          if (!item.channels) {
+          if (channels.length === 0) {
             return {
               ...item,
+              channels,
               skipStage: 'extract',
               skipReason: 'unknown-registry',
             };
@@ -316,9 +319,9 @@ export const PixiConfigSchema = z
 
           return {
             ...item,
-            registryUrls: orderChannels(item.channels).map(
-              channelToRegistryUrl,
-            ),
+            channels,
+
+            registryUrls: channels.map(channelToRegistryUrl),
           };
         });
 
@@ -339,6 +342,10 @@ function channelToRegistryUrl(channel: string) {
 
 function orderChannels(channels: Channels): string[] {
   return channels
+    .map((item) => {
+      console.log(item);
+      return item;
+    })
     .map((channel, index) => {
       if (is.string(channel)) {
         return { channel, priority: 0, index };
@@ -347,12 +354,12 @@ function orderChannels(channels: Channels): string[] {
       return { ...channel, index: 0 };
     })
     .toSorted((a, b) => {
-      // frist compare based on priority then based on index
-      if (a.priority === b.priority) {
-        return b.index - a.index;
+      // frist based on priority then based on index
+      if (a.priority !== b.priority) {
+        return b.priority - a.priority;
       }
 
-      return a.priority - b.priority;
+      return a.index - b.index;
     })
     .map((c) => c.channel);
 }

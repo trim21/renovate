@@ -90,7 +90,7 @@ xfail_strict = true
 const fullPixiConfig = `
 [project]
 authors = ["Trim21 <trim21.me@gmail.com>"]
-channels = ["conda-forge"]
+channels = ["conda-forge", 'conda-not-forge']
 name = "pixi"
 platforms = ["win-64"]
 version = "0.1.0"
@@ -543,6 +543,7 @@ describe('modules/manager/pixi/extract', () => {
               {
                 "channels": [
                   "conda-forge",
+                  "conda-not-forge",
                 ],
                 "currentValue": "==3.12",
                 "datasource": "conda",
@@ -556,6 +557,7 @@ describe('modules/manager/pixi/extract', () => {
                 },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
+                  "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
               },
@@ -563,6 +565,7 @@ describe('modules/manager/pixi/extract', () => {
                 "channel": undefined,
                 "channels": [
                   "conda-forge",
+                  "conda-not-forge",
                 ],
                 "currentValue": "*",
                 "datasource": "conda",
@@ -577,18 +580,17 @@ describe('modules/manager/pixi/extract', () => {
                 },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
+                  "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
               },
               {
                 "channel": "channel of scipy",
                 "channels": [
+                  "cuda",
                   "anaconda",
-                  {
-                    "channel": "cuda",
-                    "priority": 1,
-                  },
                   "conda-forge",
+                  "conda-not-forge",
                 ],
                 "currentValue": "==1.15.1",
                 "datasource": "conda",
@@ -610,12 +612,10 @@ describe('modules/manager/pixi/extract', () => {
               },
               {
                 "channels": [
+                  "cuda",
                   "anaconda",
-                  {
-                    "channel": "cuda",
-                    "priority": 1,
-                  },
                   "conda-forge",
+                  "conda-not-forge",
                 ],
                 "currentValue": "==3.10.0",
                 "datasource": "conda",
@@ -632,15 +632,17 @@ describe('modules/manager/pixi/extract', () => {
                   ],
                 },
                 "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                  "https://api.anaconda.org/package/anaconda/",
                   "https://api.anaconda.org/package/cuda/",
+                  "https://api.anaconda.org/package/anaconda/",
+                  "https://api.anaconda.org/package/conda-forge/",
+                  "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
               },
               {
                 "channels": [
                   "conda-forge",
+                  "conda-not-forge",
                 ],
                 "currentValue": "==0.9.7",
                 "datasource": "conda",
@@ -656,6 +658,7 @@ describe('modules/manager/pixi/extract', () => {
                 },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
+                  "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
               },
@@ -814,16 +817,10 @@ matplotlib = { version = "==3.10.0", channel = 'cuda' }
           {
             "channel": "channel of scipy",
             "channels": [
+              "cuda",
               "anaconda",
-              {
-                "channel": "cuda",
-                "priority": 1,
-              },
-              {
-                "channel": "d",
-                "priority": -1,
-              },
               "conda-forge",
+              "d",
             ],
             "currentValue": "==1.15.1",
             "datasource": "conda",
@@ -846,16 +843,10 @@ matplotlib = { version = "==3.10.0", channel = 'cuda' }
           {
             "channel": "cuda",
             "channels": [
+              "cuda",
               "anaconda",
-              {
-                "channel": "cuda",
-                "priority": 1,
-              },
-              {
-                "channel": "d",
-                "priority": -1,
-              },
               "conda-forge",
+              "d",
             ],
             "currentValue": "==3.10.0",
             "datasource": "conda",
