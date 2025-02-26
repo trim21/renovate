@@ -227,113 +227,131 @@ describe('modules/manager/pixi/extract', () => {
       fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
       fs.localPathExists.mockReturnValueOnce(Promise.resolve(false));
 
-      expect(
-        await extractPackageFile(fullPixiConfig, 'pixi.toml'),
-      ).toMatchObject({
-        deps: [
-          {
-            currentValue: '*',
-            datasource: 'pypi',
-            depName: 'requests',
-            managerData: {
-              path: ['pypi-dependencies', 'requests'],
+      expect(await extractPackageFile(fullPixiConfig, 'pixi.toml'))
+        .toMatchInlineSnapshot(`
+        {
+          "deps": [
+            {
+              "currentValue": "*",
+              "datasource": "pypi",
+              "depName": "requests",
+              "managerData": {
+                "path": [
+                  "pypi-dependencies",
+                  "requests",
+                ],
+              },
+              "versioning": "pep440",
             },
-            versioning: 'pep440',
-          },
-          {
-            currentValue: '*',
-            datasource: 'pypi',
-            depName: 'requests2',
-            managerData: {
-              path: ['pypi-dependencies', 'requests2', 'version'],
+            {
+              "currentValue": "*",
+              "datasource": "pypi",
+              "depName": "requests2",
+              "managerData": {
+                "path": [
+                  "pypi-dependencies",
+                  "requests2",
+                  "version",
+                ],
+              },
+              "versioning": "pep440",
             },
-            versioning: 'pep440',
-          },
-          {
-            currentValue: '*',
-            datasource: 'pypi',
-            depName: 'flake8',
-            depType: 'lint',
-            managerData: {
-              path: ['feature', 'lint', 'pypi-dependencies', 'flake8'],
+            {
+              "currentValue": "*",
+              "datasource": "pypi",
+              "depName": "flake8",
+              "managerData": {
+                "path": [
+                  "feature",
+                  "lint",
+                  "pypi-dependencies",
+                  "flake8",
+                ],
+              },
+              "versioning": "pep440",
             },
-            versioning: 'pep440',
-          },
-          {
-            currentValue: '==25.*',
-            datasource: 'pypi',
-            depName: 'black',
-            depType: 'lint',
-            managerData: {
-              path: [
-                'feature',
-                'lint',
-                'target',
-                'win-64',
-                'pypi-dependencies',
-                'black',
-              ],
+            {
+              "currentValue": "==25.*",
+              "datasource": "pypi",
+              "depName": "black",
+              "managerData": {
+                "path": [
+                  "feature",
+                  "lint",
+                  "target",
+                  "win-64",
+                  "pypi-dependencies",
+                  "black",
+                ],
+              },
+              "versioning": "pep440",
             },
-            versioning: 'pep440',
-          },
-          {
-            currentValue: '>0',
-            datasource: 'pypi',
-            depName: 'black',
-            depType: 'test',
-            managerData: {
-              path: ['feature', 'test', 'pypi-dependencies', 'black'],
+            {
+              "currentValue": ">0",
+              "datasource": "pypi",
+              "depName": "black",
+              "managerData": {
+                "path": [
+                  "feature",
+                  "test",
+                  "pypi-dependencies",
+                  "black",
+                ],
+              },
+              "versioning": "pep440",
             },
-            versioning: 'pep440',
-          },
-          {
-            currentValue: '0106aced5faa299e6ede89d1230bd6784f2c3660',
-            depName: 'requests',
-            depType: 'test',
-            gitRef: true,
-            managerData: {
-              path: ['feature', 'test', 'pypi-dependencies', 'requests', 'ref'],
+            {
+              "currentValue": "0106aced5faa299e6ede89d1230bd6784f2c3660",
+              "depName": "requests",
+              "gitRef": true,
+              "managerData": {
+                "path": [
+                  "feature",
+                  "test",
+                  "pypi-dependencies",
+                  "requests",
+                  "ref",
+                ],
+              },
+              "sourceUrl": "https://github.com/psf/requests.git",
+              "versioning": "git",
             },
-            sourceUrl: 'https://github.com/psf/requests.git',
-            versioning: 'git',
-          },
-          {
-            currentValue: 'v0.3.0',
-            depName: 'pytest-github-actions-annotate-failures',
-            depType: 'test',
-            gitRef: true,
-            managerData: {
-              path: [
-                'feature',
-                'test',
-                'pypi-dependencies',
-                'pytest-github-actions-annotate-failures',
-                'ref',
-              ],
+            {
+              "currentValue": "v0.3.0",
+              "depName": "pytest-github-actions-annotate-failures",
+              "gitRef": true,
+              "managerData": {
+                "path": [
+                  "feature",
+                  "test",
+                  "pypi-dependencies",
+                  "pytest-github-actions-annotate-failures",
+                  "ref",
+                ],
+              },
+              "sourceUrl": "https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git",
+              "versioning": "git",
             },
-            sourceUrl:
-              'https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git',
-            versioning: 'git',
-          },
-          {
-            currentValue: '*',
-            datasource: 'pypi',
-            depName: 'urllib3',
-            managerData: {
-              path: [
-                'target',
-                'win-64',
-                'pypi-dependencies',
-                'urllib3',
-                'version',
-              ],
+            {
+              "currentValue": "*",
+              "datasource": "pypi",
+              "depName": "urllib3",
+              "managerData": {
+                "path": [
+                  "target",
+                  "win-64",
+                  "pypi-dependencies",
+                  "urllib3",
+                  "version",
+                ],
+              },
+              "versioning": "pep440",
             },
-            versioning: 'pep440',
-          },
-        ],
-        fileFormat: 'toml',
-        lockFiles: [],
-      });
+          ],
+          "fileFormat": "toml",
+          "lockFiles": [],
+        }
+      `);
     });
   });
 });

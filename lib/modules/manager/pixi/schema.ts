@@ -162,20 +162,14 @@ export const PixiConfigSchema = z
         ] of Object.entries(features)) {
           result.push(
             ...pypi.map((item) => {
-              return {
-                ...prependObjectPath(item, ['feature', feature]),
-                depType: feature,
-              };
+              return prependObjectPath(item, ['feature', feature]);
             }),
           );
 
           result.push(
-            ...target.pypi.map((item) => {
-              return {
-                ...prependObjectPath(item, ['feature', feature]),
-                depType: feature,
-              };
-            }),
+            ...target.pypi.map((item) =>
+              prependObjectPath(item, ['feature', feature]),
+            ),
           );
         }
 
@@ -186,7 +180,16 @@ export const PixiConfigSchema = z
     const deps = val['pypi-dependencies']
       .concat(val.feature.pypi)
       .concat(val.target.pypi);
-    return { pypi: deps };
+    return {
+      pypi: deps.map((item) => {
+        return {
+          ...item,
+          depType: 'pypi-dependencies',
+        };
+      }),
+    } satisfies {
+      pypi: PixiPackageDependency[];
+    };
   });
 
 export const PyprojectSchema = z
