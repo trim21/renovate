@@ -229,129 +229,137 @@ describe('modules/manager/pixi/extract', () => {
 
       expect(await extractPackageFile(fullPixiConfig, 'pixi.toml'))
         .toMatchInlineSnapshot(`
-        {
-          "deps": [
-            {
-              "currentValue": "*",
-              "datasource": "pypi",
-              "depName": "requests",
-              "managerData": {
-                "path": [
-                  "pypi-dependencies",
-                  "requests",
-                ],
+          {
+            "deps": [
+              {
+                "currentValue": "*",
+                "datasource": "pypi",
+                "depName": "requests",
+                "depType": "pypi-dependencies",
+                "managerData": {
+                  "path": [
+                    "pypi-dependencies",
+                    "requests",
+                  ],
+                },
+                "versioning": "pep440",
               },
-              "versioning": "pep440",
-            },
-            {
-              "currentValue": "*",
-              "datasource": "pypi",
-              "depName": "requests2",
-              "managerData": {
-                "path": [
-                  "pypi-dependencies",
-                  "requests2",
-                  "version",
-                ],
+              {
+                "currentValue": "*",
+                "datasource": "pypi",
+                "depName": "requests2",
+                "depType": "pypi-dependencies",
+                "managerData": {
+                  "path": [
+                    "pypi-dependencies",
+                    "requests2",
+                    "version",
+                  ],
+                },
+                "versioning": "pep440",
               },
-              "versioning": "pep440",
-            },
-            {
-              "currentValue": "*",
-              "datasource": "pypi",
-              "depName": "flake8",
-              "managerData": {
-                "path": [
-                  "feature",
-                  "lint",
-                  "pypi-dependencies",
-                  "flake8",
-                ],
+              {
+                "currentValue": "*",
+                "datasource": "pypi",
+                "depName": "flake8",
+                "depType": "pypi-dependencies",
+                "managerData": {
+                  "path": [
+                    "feature",
+                    "lint",
+                    "pypi-dependencies",
+                    "flake8",
+                  ],
+                },
+                "versioning": "pep440",
               },
-              "versioning": "pep440",
-            },
-            {
-              "currentValue": "==25.*",
-              "datasource": "pypi",
-              "depName": "black",
-              "managerData": {
-                "path": [
-                  "feature",
-                  "lint",
-                  "target",
-                  "win-64",
-                  "pypi-dependencies",
-                  "black",
-                ],
+              {
+                "currentValue": "==25.*",
+                "datasource": "pypi",
+                "depName": "black",
+                "depType": "pypi-dependencies",
+                "managerData": {
+                  "path": [
+                    "feature",
+                    "lint",
+                    "target",
+                    "win-64",
+                    "pypi-dependencies",
+                    "black",
+                  ],
+                },
+                "versioning": "pep440",
               },
-              "versioning": "pep440",
-            },
-            {
-              "currentValue": ">0",
-              "datasource": "pypi",
-              "depName": "black",
-              "managerData": {
-                "path": [
-                  "feature",
-                  "test",
-                  "pypi-dependencies",
-                  "black",
-                ],
+              {
+                "currentValue": ">0",
+                "datasource": "pypi",
+                "depName": "black",
+                "depType": "pypi-dependencies",
+                "managerData": {
+                  "path": [
+                    "feature",
+                    "test",
+                    "pypi-dependencies",
+                    "black",
+                  ],
+                },
+                "versioning": "pep440",
               },
-              "versioning": "pep440",
-            },
-            {
-              "currentValue": "0106aced5faa299e6ede89d1230bd6784f2c3660",
-              "depName": "requests",
-              "gitRef": true,
-              "managerData": {
-                "path": [
-                  "feature",
-                  "test",
-                  "pypi-dependencies",
-                  "requests",
-                  "ref",
-                ],
+              {
+                "currentValue": "0106aced5faa299e6ede89d1230bd6784f2c3660",
+                "depName": "requests",
+                "depType": "pypi-dependencies",
+                "gitRef": true,
+                "managerData": {
+                  "path": [
+                    "feature",
+                    "test",
+                    "pypi-dependencies",
+                    "requests",
+                    "ref",
+                  ],
+                },
+                "sourceUrl": "https://github.com/psf/requests.git",
+                "versioning": "git",
               },
-              "sourceUrl": "https://github.com/psf/requests.git",
-              "versioning": "git",
-            },
-            {
-              "currentValue": "v0.3.0",
-              "depName": "pytest-github-actions-annotate-failures",
-              "gitRef": true,
-              "managerData": {
-                "path": [
-                  "feature",
-                  "test",
-                  "pypi-dependencies",
-                  "pytest-github-actions-annotate-failures",
-                  "ref",
-                ],
+              {
+                "currentValue": "v0.3.0",
+                "depName": "pytest-github-actions-annotate-failures",
+                "depType": "pypi-dependencies",
+                "gitRef": true,
+                "managerData": {
+                  "path": [
+                    "feature",
+                    "test",
+                    "pypi-dependencies",
+                    "pytest-github-actions-annotate-failures",
+                    "ref",
+                  ],
+                },
+                "sourceUrl": "https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git",
+                "versioning": "git",
               },
-              "sourceUrl": "https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git",
-              "versioning": "git",
-            },
-            {
-              "currentValue": "*",
-              "datasource": "pypi",
-              "depName": "urllib3",
-              "managerData": {
-                "path": [
-                  "target",
-                  "win-64",
-                  "pypi-dependencies",
-                  "urllib3",
-                  "version",
-                ],
+              {
+                "currentValue": "*",
+                "datasource": "pypi",
+                "depName": "urllib3",
+                "depType": "pypi-dependencies",
+                "managerData": {
+                  "path": [
+                    "target",
+                    "win-64",
+                    "pypi-dependencies",
+                    "urllib3",
+                    "version",
+                  ],
+                },
+                "versioning": "pep440",
               },
-              "versioning": "pep440",
-            },
-          ],
-          "fileFormat": "toml",
-          "lockFiles": [],
-        }
-      `);
+            ],
+            "fileFormat": "toml",
+            "lockFiles": [],
+          }
+        `);
     });
   });
 });
