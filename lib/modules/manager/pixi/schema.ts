@@ -342,10 +342,6 @@ function channelToRegistryUrl(channel: string) {
 
 function orderChannels(channels: Channels): string[] {
   return channels
-    .map((item) => {
-      console.log(item);
-      return item;
-    })
     .map((channel, index) => {
       if (is.string(channel)) {
         return { channel, priority: 0, index };
