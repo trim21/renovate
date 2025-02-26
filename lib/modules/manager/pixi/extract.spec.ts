@@ -158,69 +158,284 @@ describe('modules/manager/pixi/extract', () => {
     });
 
     it('returns parse pixi.toml', async () => {
-      expect(await extractPackageFile(pixiToml, 'pixi.toml')).toMatchObject({
-        deps: [],
-        fileFormat: 'toml',
-        lockFiles: [],
-      });
+      expect(await extractPackageFile(pixiToml, 'pixi.toml'))
+        .toMatchInlineSnapshot(`
+        {
+          "deps": [
+            {
+              "currentValue": "3.12.*",
+              "datasource": "conda",
+              "depName": "python",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "python",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=2.0,<3",
+              "datasource": "conda",
+              "depName": "geographiclib",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "geographiclib",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=2.4.1,<3",
+              "datasource": "conda",
+              "depName": "geopy",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "geopy",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=0.24.0,<0.25",
+              "datasource": "conda",
+              "depName": "cartopy",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "cartopy",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": "2.*",
+              "datasource": "conda",
+              "depName": "pydantic",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "pydantic",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=3.10.0,<4",
+              "datasource": "conda",
+              "depName": "matplotlib",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "matplotlib",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=5.15.9,<6",
+              "datasource": "conda",
+              "depName": "pyqt",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "pyqt",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=2.2.3,<3",
+              "datasource": "conda",
+              "depName": "pandas",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "pandas",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=2.9.0.post0,<3",
+              "datasource": "conda",
+              "depName": "python-dateutil",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "python-dateutil",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=13.9.4,<14",
+              "datasource": "conda",
+              "depName": "rich",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "rich",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=1.15.2,<2",
+              "datasource": "conda",
+              "depName": "scipy",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "scipy",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=4.67.1,<5",
+              "datasource": "conda",
+              "depName": "tqdm",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "tqdm",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=2025a",
+              "datasource": "conda",
+              "depName": "tzdata",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "tzdata",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": "2.*",
+              "datasource": "conda",
+              "depName": "numpy",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "numpy",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=1.3.0,<2",
+              "datasource": "conda",
+              "depName": "adjusttext",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "adjusttext",
+                ],
+              },
+              "versioning": "conda",
+            },
+            {
+              "currentValue": ">=3.11.1,<4",
+              "datasource": "conda",
+              "depName": "iris",
+              "depType": "dependencies",
+              "managerData": {
+                "path": [
+                  "dependencies",
+                  "iris",
+                ],
+              },
+              "versioning": "conda",
+            },
+          ],
+          "lockFiles": [],
+        }
+      `);
     });
 
     it('returns parse pixi section from pyproject.toml', async () => {
       fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
       fs.localPathExists.mockReturnValueOnce(Promise.resolve(true));
 
-      expect(
-        await extractPackageFile(pyprojectToml, 'pyproject.toml'),
-      ).toMatchObject({
-        deps: [
-          {
-            currentValue: '*',
-            datasource: 'pypi',
-            depName: 'requests',
-            managerData: {
-              path: [
-                'tool',
-                'pixi',
-                'pypi-dependencies',
-                'requests',
-                'version',
-              ],
+      expect(await extractPackageFile(pyprojectToml, 'pyproject.toml'))
+        .toMatchInlineSnapshot(`
+        {
+          "deps": [
+            {
+              "currentValue": "*",
+              "datasource": "pypi",
+              "depName": "requests",
+              "depType": "pypi-dependencies",
+              "managerData": {
+                "path": [
+                  "tool",
+                  "pixi",
+                  "pypi-dependencies",
+                  "requests",
+                  "version",
+                ],
+              },
+              "versioning": "pep440",
             },
-            versioning: 'pep440',
-          },
-        ],
-        fileFormat: 'toml',
-        lockFiles: ['pixi.lock'],
-      });
+          ],
+          "lockFiles": [
+            "pixi.lock",
+          ],
+        }
+      `);
     });
 
     it('returns package of pyproject.toml tool.pixi section', async () => {
       fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
       fs.localPathExists.mockReturnValueOnce(Promise.resolve(false));
 
-      expect(
-        await extractPackageFile(pyprojectToml, 'pyproject.toml'),
-      ).toMatchObject({
-        deps: [
-          {
-            currentValue: '*',
-            datasource: 'pypi',
-            depName: 'requests',
-            managerData: {
-              path: [
-                'tool',
-                'pixi',
-                'pypi-dependencies',
-                'requests',
-                'version',
-              ],
+      expect(await extractPackageFile(pyprojectToml, 'pyproject.toml'))
+        .toMatchInlineSnapshot(`
+        {
+          "deps": [
+            {
+              "currentValue": "*",
+              "datasource": "pypi",
+              "depName": "requests",
+              "depType": "pypi-dependencies",
+              "managerData": {
+                "path": [
+                  "tool",
+                  "pixi",
+                  "pypi-dependencies",
+                  "requests",
+                  "version",
+                ],
+              },
+              "versioning": "pep440",
             },
-            versioning: 'pep440',
-          },
-        ],
-        fileFormat: 'toml',
-        lockFiles: [],
-      });
+          ],
+          "lockFiles": [],
+        }
+      `);
     });
 
     it('returns parse pixi.toml with features', async () => {
@@ -231,6 +446,34 @@ describe('modules/manager/pixi/extract', () => {
         .toMatchInlineSnapshot(`
           {
             "deps": [
+              {
+                "currentValue": "==3.12",
+                "datasource": "conda",
+                "depName": "python",
+                "depType": "dependencies",
+                "managerData": {
+                  "path": [
+                    "dependencies",
+                    "python",
+                  ],
+                },
+                "versioning": "conda",
+              },
+              {
+                "currentValue": "*",
+                "datasource": "conda",
+                "depName": "numpy",
+                "depType": "dependencies",
+                "managerData": {
+                  "path": [
+                    "dependencies",
+                    "numpy",
+                    "version",
+                  ],
+                },
+                "registryUrls": [],
+                "versioning": "conda",
+              },
               {
                 "currentValue": "*",
                 "datasource": "pypi",
@@ -356,7 +599,6 @@ describe('modules/manager/pixi/extract', () => {
                 "versioning": "pep440",
               },
             ],
-            "fileFormat": "toml",
             "lockFiles": [],
           }
         `);

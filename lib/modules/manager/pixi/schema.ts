@@ -4,6 +4,8 @@ import { isNotNullOrUndefined } from '../../../util/array';
 import { LooseRecord, Toml, Yaml } from '../../../util/schema-utils';
 import { PypiDatasource } from '../../datasource/pypi';
 import { id as gitRefVersionID } from '../../versioning/git';
+import * as condaVersion from '../../versioning/conda/';
+import { CondaDatasource } from '../../datasource/conda/';
 import { id as pep440VersionID } from '../../versioning/pep440/';
 import type { PackageDependency } from '../types';
 
@@ -88,6 +90,49 @@ const pypiDependencies = z
       .filter((dep) => isNotNullOrUndefined(dep));
   });
 
+const condaDependencies = z
+  .record(
+    z.string(),
+    z.union([
+      z.string().transform((version) => {
+        return {
+          currentValue: version,
+          versioning: condaVersion.id,
+          datasource: CondaDatasource.id,
+          managerData: { path: [] },
+        } satisfies PixiPackageDependency;
+      }),
+      z
+        .object({ version: z.string(), channel: z.optional(z.string()) })
+        .transform(({ version, channel }) => {
+          return {
+            currentValue: version,
+            versioning: condaVersion.id,
+            datasource: CondaDatasource.id,
+            managerData: { path: ['version'] },
+            registryUrls: channel ? [channel] : [],
+          } satisfies PixiPackageDependency;
+        }),
+    ]),
+  )
+  .transform((val) => {
+    return Object.entries(val)
+      .map(([depName, config]) => {
+        if (is.nullOrUndefined(config)) {
+          return;
+        }
+
+        return prependObjectPath(
+          {
+            ...config,
+            depName,
+          },
+          [depName],
+        );
+      })
+      .filter((dep) => isNotNullOrUndefined(dep));
+  });
+
 const Targets = LooseRecord(
   z.string(),
   z.object({
@@ -122,6 +167,12 @@ export const PixiConfigSchema = z
         return val.map((item) =>
           prependObjectPath(item, ['pypi-dependencies']),
         );
+      }),
+    dependencies: z
+      .optional(condaDependencies)
+      .default({})
+      .transform((val) => {
+        return val.map((item) => prependObjectPath(item, ['dependencies']));
       }),
     target: z
       .optional(Targets)
@@ -180,12 +231,19 @@ export const PixiConfigSchema = z
     (
       val,
     ): {
+      conda: PixiPackageDependency[];
       pypi: PixiPackageDependency[];
     } => {
       const deps = val['pypi-dependencies']
         .concat(val.feature.pypi)
         .concat(val.target.pypi);
       return {
+        conda: val.dependencies.map((item) => {
+          return {
+            ...item,
+            depType: 'dependencies',
+          };
+        }),
         pypi: deps.map((item) => {
           return {
             ...item,
@@ -200,12 +258,15 @@ export const PyprojectSchema = z
   .object({
     tool: z.object({ pixi: z.optional(PixiConfigSchema) }),
   })
-  .transform(({ tool: { pixi } }) => {
+  .transform(({ tool: { pixi, conda } }) => {
     if (!pixi) {
       return;
     }
 
     return {
+      conda: pixi.conda.map((item) =>
+        prependObjectPath(item, ['tool', 'pixi']),
+      ),
       pypi: pixi.pypi.map((item) => prependObjectPath(item, ['tool', 'pixi'])),
     };
   });

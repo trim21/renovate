@@ -52,7 +52,6 @@ export async function extractPackageFile(
 
   return {
     lockFiles,
-    deps: config.pypi,
-    fileFormat: 'toml',
+    deps: [...config.conda, ...config.pypi],
   };
 }
