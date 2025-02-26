@@ -176,21 +176,25 @@ export const PixiConfigSchema = z
         return { pypi: result };
       }),
   })
-  .transform((val) => {
-    const deps = val['pypi-dependencies']
-      .concat(val.feature.pypi)
-      .concat(val.target.pypi);
-    return {
-      pypi: deps.map((item) => {
-        return {
-          ...item,
-          depType: 'pypi-dependencies',
-        };
-      }),
-    } satisfies {
+  .transform(
+    (
+      val,
+    ): {
       pypi: PixiPackageDependency[];
-    };
-  });
+    } => {
+      const deps = val['pypi-dependencies']
+        .concat(val.feature.pypi)
+        .concat(val.target.pypi);
+      return {
+        pypi: deps.map((item) => {
+          return {
+            ...item,
+            depType: 'pypi-dependencies',
+          };
+        }),
+      };
+    },
+  );
 
 export const PyprojectSchema = z
   .object({
