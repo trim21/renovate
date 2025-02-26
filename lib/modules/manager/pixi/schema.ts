@@ -155,11 +155,22 @@ const Targets = LooseRecord(
   return { pypi };
 });
 
+const projectSchema = z.object({
+  channels: z.array(z.string()),
+});
+
 /**
  * config of `pixi.toml` of `tool.pixi` of `pyproject.toml`
  */
 export const PixiConfigSchema = z
   .object({
+    project: projectSchema,
+    dependencies: z
+      .optional(condaDependencies)
+      .default({})
+      .transform((val) => {
+        return val.map((item) => prependObjectPath(item, ['dependencies']));
+      }),
     'pypi-dependencies': z
       .optional(pypiDependencies)
       .default({})
@@ -168,12 +179,7 @@ export const PixiConfigSchema = z
           prependObjectPath(item, ['pypi-dependencies']),
         );
       }),
-    dependencies: z
-      .optional(condaDependencies)
-      .default({})
-      .transform((val) => {
-        return val.map((item) => prependObjectPath(item, ['dependencies']));
-      }),
+
     target: z
       .optional(Targets)
       .default({})
@@ -234,22 +240,44 @@ export const PixiConfigSchema = z
       conda: PixiPackageDependency[];
       pypi: PixiPackageDependency[];
     } => {
-      const deps = val['pypi-dependencies']
+      const project = val.project;
+
+      const pypi = val['pypi-dependencies']
         .concat(val.feature.pypi)
-        .concat(val.target.pypi);
-      return {
-        conda: val.dependencies.map((item) => {
-          return {
-            ...item,
-            depType: 'dependencies',
-          };
-        }),
-        pypi: deps.map((item) => {
+        .concat(val.target.pypi)
+        .map((item) => {
           return {
             ...item,
             depType: 'pypi-dependencies',
           };
-        }),
+        });
+
+      const defaultChannel = project.channels[0];
+
+      let conda = val.dependencies.map((item) => {
+        return {
+          ...item,
+          depType: 'dependencies',
+        };
+      });
+
+      if (defaultChannel) {
+        conda = conda.map((item) => {
+          // add channels
+          if (!item.registryUrls) {
+            return {
+              ...item,
+              packageName: defaultChannel + '/' + item.packageName,
+            };
+          }
+
+          return item;
+        });
+      }
+
+      return {
+        conda,
+        pypi,
       };
     },
   );
@@ -258,7 +286,7 @@ export const PyprojectSchema = z
   .object({
     tool: z.object({ pixi: z.optional(PixiConfigSchema) }),
   })
-  .transform(({ tool: { pixi, conda } }) => {
+  .transform(({ tool: { pixi } }) => {
     if (!pixi) {
       return;
     }
