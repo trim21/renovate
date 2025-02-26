@@ -180,6 +180,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -199,6 +200,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -218,6 +220,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -237,6 +240,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -256,6 +260,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -275,6 +280,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -294,6 +300,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -313,6 +320,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -332,6 +340,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -351,6 +360,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -370,6 +380,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -389,6 +400,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -408,6 +420,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -427,6 +440,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -446,6 +460,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -465,6 +480,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
             ],
             "lockFiles": [],
@@ -560,6 +576,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channel": undefined,
@@ -583,6 +600,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channel": "channel of scipy",
@@ -638,6 +656,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "channels": [
@@ -661,6 +680,7 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
+                "warnings": undefined,
               },
               {
                 "currentValue": "*",

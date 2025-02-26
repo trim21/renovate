@@ -301,6 +301,17 @@ export const PixiConfigSchema = z
         .map((item) => {
           const channels = item.channels ? orderChannels(item.channels) : [];
           if (item.channel) {
+            // there is no reliable get versions from non-official channel except parse a huge repodata.json
+            // We will not do that, so just skip it.
+            if (looksLikeUrl(item.channel)) {
+              return {
+                ...item,
+                channels,
+                skipStage: 'extract',
+                skipReason: 'unsupported-datasource',
+              };
+            }
+
             return {
               ...item,
               channels,
@@ -321,8 +332,19 @@ export const PixiConfigSchema = z
             ...item,
             channels,
 
-            registryUrls: channels.map(channelToRegistryUrl),
-          };
+            registryUrls: channels
+              .filter((c) => !looksLikeUrl(c))
+              .map(channelToRegistryUrl),
+            warnings: channels.some((c) => looksLikeUrl(c))
+              ? [
+                  {
+                    topic: 'conda',
+                    message:
+                      'using third part channel is not support by renovatebot and it will be ignored. This may cause renovatebot try to use package from channel with low priority',
+                  },
+                ]
+              : undefined,
+          } satisfies PixiPackageDependency;
         });
 
       return {
@@ -358,6 +380,10 @@ function orderChannels(channels: Channels): string[] {
       return a.index - b.index;
     })
     .map((c) => c.channel);
+}
+
+function looksLikeUrl(s: string): boolean {
+  return s.startsWith('https://') || s.startsWith('http://');
 }
 
 export const PyprojectSchema = z
