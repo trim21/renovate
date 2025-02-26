@@ -275,9 +275,10 @@ export const PixiConfigSchema = z
 
 export const PyprojectSchema = z
   .object({
-    tool: z.object({ pixi: z.optional(PixiConfigSchema) }),
+    tool: z.object({ pixi: z.optional(PixiConfigSchema) }).optional(),
   })
-  .transform(({ tool: { pixi } }) => {
+  .default({})
+  .transform(({ tool: { pixi } = {} }) => {
     if (!pixi) {
       return;
     }
