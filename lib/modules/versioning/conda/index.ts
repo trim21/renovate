@@ -20,12 +20,9 @@ export const urls = [
 ];
 export const supportsRanges = true;
 export const supportedRangeStrategies: RangeStrategy[] = [
-  // 'bump',
+  // TODO we should support more strategy but currently only pin
   'pin',
-  // 'replace',
 ];
-
-const unstableComponents = ['alpha', 'beta', 'dev', 'rc', 'a', 'b'];
 
 function isValidVersion(s: string): boolean {
   try {
@@ -103,21 +100,13 @@ export const api = {
   isVersion: isValidVersion,
   isSingleVersion,
 
+  // conda doesn't have stable version and non-stable version
+  // for example, tzdata has version 2024a but it's stable
   isStable(version: string): boolean {
-    if (!parse(version)) {
-      return false;
-    }
-
-    for (const element of unstableComponents) {
-      if (version.includes(element)) {
-        return false;
-      }
-    }
-
-    return true;
+    return !(parse(version)?.isDev ?? true);
   },
 
-  // conda version are always compatible with each other.
+  // conda use version are always compatible with each other.
   isCompatible(version: string, current?: string): boolean {
     return true;
   },
