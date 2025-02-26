@@ -17,7 +17,12 @@ export interface PixiManagerData {
   path: (string | number)[];
 }
 
+type Channel = string | { channel: string; priority: number };
+type Channels = Channel[];
+
 export interface PixiPackageDependency extends PackageDependency {
+  channel?: string;
+  channels?: (string | { channel: string; priority: number })[];
   managerData: PixiManagerData;
 }
 
@@ -113,7 +118,7 @@ const condaDependencies = z
             datasource: CondaDatasource.id,
             managerData: { path: ['version'] },
             depType: 'dependencies',
-            registryUrls: channel ? [channel] : [],
+            channel,
           } satisfies PixiPackageDependency;
         }),
     ]),
@@ -139,6 +144,12 @@ const condaDependencies = z
 const Targets = LooseRecord(
   z.string(),
   z.object({
+    dependencies: z
+      .optional(condaDependencies)
+      .default({})
+      .transform((val) => {
+        return val.map((item) => prependObjectPath(item, ['dependencies']));
+      }),
     'pypi-dependencies': z.optional(pypiDependencies).transform((val) => {
       return (
         val?.map((item) => prependObjectPath(item, ['pypi-dependencies'])) ?? []
@@ -146,6 +157,7 @@ const Targets = LooseRecord(
     }),
   }),
 ).transform((val) => {
+  const conda: PixiPackageDependency[] = [];
   const pypi: PixiPackageDependency[] = [];
   for (const [key, value] of Object.entries(val)) {
     pypi.push(
@@ -153,21 +165,21 @@ const Targets = LooseRecord(
         prependObjectPath(item, [key]),
       ),
     );
+
+    conda.push(
+      ...value.dependencies.map((item) => prependObjectPath(item, [key])),
+    );
   }
 
-  return { pypi };
+  return { pypi, conda };
 });
 
 const projectSchema = z.object({
-  channels: z.array(z.string()),
+  channels: z.array(z.string()).default([]),
 });
 
-/**
- * config of `pixi.toml` of `tool.pixi` of `pyproject.toml`
- */
-export const PixiConfigSchema = z
+const DependencieSchemaMixin = z
   .object({
-    project: projectSchema,
     dependencies: z
       .optional(condaDependencies)
       .default({})
@@ -186,56 +198,81 @@ export const PixiConfigSchema = z
     target: z
       .optional(Targets)
       .default({})
-      .transform(({ pypi }) => {
+      .transform(({ pypi, conda }) => {
         return {
+          conda: conda.map((item) => prependObjectPath(item, ['target'])),
           pypi: pypi.map((item) => prependObjectPath(item, ['target'])),
         };
       }),
+  })
+  .transform(
+    (
+      val,
+    ): { pypi: PixiPackageDependency[]; conda: PixiPackageDependency[] } => {
+      return {
+        conda: [...val.dependencies, ...val.target.conda],
+        pypi: [...val['pypi-dependencies'], ...val.target.pypi],
+      };
+    },
+  );
+
+/**
+ * config of `pixi.toml` of `tool.pixi` of `pyproject.toml`
+ */
+export const PixiConfigSchema = z
+  .object({
+    project: projectSchema,
+
     feature: LooseRecord(
       z.string(),
-      z.object({
-        'pypi-dependencies': z
-          .optional(pypiDependencies)
-          .default({})
-          .transform((val) => {
-            return val.map((item) =>
-              prependObjectPath(item, ['pypi-dependencies']),
-            );
-          }),
-        target: z
-          .optional(Targets)
-          .default({})
-          .transform(({ pypi }) => {
-            return {
-              pypi: pypi.map((item) => prependObjectPath(item, ['target'])),
-            };
-          }),
-      }),
+      z
+        .object({
+          channels: z
+            .array(
+              z.union([
+                z.string(),
+                z.object({ channel: z.string(), priority: z.number() }),
+              ]),
+            )
+            .optional(),
+        })
+        .and(DependencieSchemaMixin),
     )
       .default({})
-      .transform((features) => {
-        const result: PixiPackageDependency[] = [];
+      .transform(
+        (
+          features,
+        ): {
+          conda: PixiPackageDependency[];
+          pypi: PixiPackageDependency[];
+        } => {
+          const pypi: PixiPackageDependency[] = [];
+          const conda: PixiPackageDependency[] = [];
 
-        for (const [
-          feature,
-          { target, 'pypi-dependencies': pypi },
-        ] of Object.entries(features)) {
-          result.push(
-            ...pypi.map((item) => {
-              return prependObjectPath(item, ['feature', feature]);
-            }),
-          );
+          for (const [name, feature] of Object.entries(features)) {
+            conda.push(
+              ...feature.conda.map((item) => {
+                return {
+                  ...prependObjectPath(item, ['feature', name]),
+                  channels: feature.channels,
+                };
+              }),
+            );
 
-          result.push(
-            ...target.pypi.map((item) =>
-              prependObjectPath(item, ['feature', feature]),
-            ),
-          );
-        }
+            pypi.push(
+              ...feature.pypi.map((item) => {
+                return {
+                  ...prependObjectPath(item, ['feature', name]),
+                };
+              }),
+            );
+          }
 
-        return { pypi: result };
-      }),
+          return { pypi, conda };
+        },
+      ),
   })
+  .and(DependencieSchemaMixin)
   .transform(
     (
       val,
@@ -244,44 +281,81 @@ export const PixiConfigSchema = z
       pypi: PixiPackageDependency[];
     } => {
       const project = val.project;
+      const channels: Channels = structuredClone(project.channels);
 
-      const pypi = val['pypi-dependencies']
-        .concat(val.feature.pypi)
-        .concat(val.target.pypi)
+      // resolve channels and build registry urls for each channel with order
+      const conda: PixiPackageDependency[] = val.conda
         .map((item) => {
+          return { ...item, channels } as PixiPackageDependency;
+        })
+        .concat(
+          val.feature.conda.map(
+            (item: PixiPackageDependency): PixiPackageDependency => {
+              return {
+                ...item,
+                channels: [...(item.channels ?? []), ...project.channels],
+              };
+            },
+          ),
+        )
+        .map((item) => {
+          if (item.channel) {
+            return {
+              ...item,
+              registryUrls: [channelToRegistryUrl(item.channel)],
+            };
+          }
+
+          if (!item.channels) {
+            return {
+              ...item,
+              skipStage: 'extract',
+              skipReason: 'unknown-registry',
+            };
+          }
+
           return {
             ...item,
-            depType: 'pypi-dependencies',
+            registryUrls: orderChannels(item.channels).map(
+              channelToRegistryUrl,
+            ),
           };
         });
 
-      const conda = val.dependencies.map((item) => {
-        // add channels
-        if (
-          isNotNullOrUndefined(item.registryUrls) &&
-          item.registryUrls.length !== 0
-        ) {
-          return item;
-        }
-
-        return {
-          ...item,
-          registryUrls: project.channels.slice().map((item) => {
-            if (item.startsWith('http://') || item.startsWith('https://')) {
-              return item + '/';
-            }
-
-            return defaultCondaRegistryAPi + item + '/';
-          }),
-        };
-      });
-
       return {
         conda,
-        pypi,
+        pypi: val.pypi.concat(val.feature.pypi),
       };
     },
   );
+
+function channelToRegistryUrl(channel: string) {
+  if (channel.startsWith('http://') || channel.startsWith('https://')) {
+    return channel;
+  }
+
+  return defaultCondaRegistryAPi + channel + '/';
+}
+
+function orderChannels(channels: Channels): string[] {
+  return channels
+    .map((channel, index) => {
+      if (is.string(channel)) {
+        return { channel, priority: 0, index };
+      }
+
+      return { ...channel, index: 0 };
+    })
+    .toSorted((a, b) => {
+      // frist compare based on priority then based on index
+      if (a.priority === b.priority) {
+        return b.index - a.index;
+      }
+
+      return a.priority - b.priority;
+    })
+    .map((c) => c.channel);
+}
 
 export const PyprojectSchema = z
   .object({

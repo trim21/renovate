@@ -87,8 +87,16 @@ function getNewValue({
   }
 
   if (rangeStrategy === 'replace') {
+    if (currentValue.includes('|')) {
+      //  conda or, can't replace
+      return null;
+    }
+
     if (currentVersion) {
-      if (currentValue.includes(currentVersion)) {
+      if (
+        ['==', '>'].some((item) => currentValue.startsWith(item)) &&
+        currentValue.includes(currentVersion)
+      ) {
         return currentValue.replace(currentVersion, newVersion);
       }
     }
