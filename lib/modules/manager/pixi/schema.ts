@@ -354,7 +354,7 @@ export const PixiConfigSchema = z
     },
   );
 
-function channelToRegistryUrl(channel: string) {
+function channelToRegistryUrl(channel: string): string {
   if (channel.startsWith('http://') || channel.startsWith('https://')) {
     return channel;
   }
