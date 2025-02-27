@@ -1,29 +1,15 @@
-import is from '@sindresorhus/is';
-import type { z } from 'zod';
 import { logger } from '../../../logger';
 import { getSiblingFileName, localPathExists } from '../../../util/fs';
 import { Result } from '../../../util/result';
-import * as toml from '../../../util/toml';
 import type { PackageFileContent } from '../types';
-import { type PixiConfigSchema, PixiToml, PyprojectSchema } from './schema';
+import { type PixiConfig, PixiToml, PyprojectToml } from './schema';
 
 function getUserPixiConfig(
   content: string,
   packageFile: string,
-): null | z.infer<typeof PixiConfigSchema> {
+): null | PixiConfig {
   if (packageFile.endsWith('pyproject.toml')) {
-    let uncheckedValue: undefined | { tool?: { pixi?: any } };
-    try {
-      uncheckedValue = toml.parse(content) as any;
-    } catch (err) {
-      logger.debug({ packageFile, err }, `pixi: error parsing pyproject.toml`);
-      return null;
-    }
-    if (is.nullOrUndefined(uncheckedValue?.tool?.pixi)) {
-      return null;
-    }
-
-    const { val, err } = Result.parse(uncheckedValue, PyprojectSchema).unwrap();
+    const { val, err } = Result.parse(content, PyprojectToml).unwrap();
     if (err) {
       logger.debug(
         { packageFile, err },
@@ -32,13 +18,13 @@ function getUserPixiConfig(
       return null;
     }
 
-    return val;
+    return val.tool?.pixi;
   }
 
   if (packageFile.endsWith('pixi.toml')) {
     const { val, err } = Result.parse(content, PixiToml).unwrap();
     if (err) {
-      logger.debug({ packageFile, err }, `pixi: error parsing pixi.toml`);
+      logger.debug({ packageFile, err }, `error parsing ${packageFile}`);
       return null;
     }
 
@@ -61,7 +47,7 @@ export async function extractPackageFile(
   }
 
   const lockfileName = getSiblingFileName(packageFile, 'pixi.lock');
-  const lockFiles = [];
+  const lockFiles: string[] = [];
   if (await localPathExists(lockfileName)) {
     lockFiles.push(lockfileName);
   }

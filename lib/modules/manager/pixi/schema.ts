@@ -386,21 +386,29 @@ function looksLikeUrl(s: string): boolean {
   return s.startsWith('https://') || s.startsWith('http://');
 }
 
+export type PixiConfig = z.infer<typeof PixiConfigSchema>;
+
 export const PyprojectSchema = z
   .object({
     tool: z.object({ pixi: PixiConfigSchema.optional() }).optional(),
   })
   .default({})
-  .transform(({ tool: { pixi } = {} }) => {
+  .transform(({ tool: { pixi } = {} } = {}) => {
     if (!pixi) {
-      return null;
+      return { tool: { pixi: null } };
     }
 
     return {
-      conda: pixi.conda.map((item) =>
-        prependObjectPath(item, ['tool', 'pixi']),
-      ),
-      pypi: pixi.pypi.map((item) => prependObjectPath(item, ['tool', 'pixi'])),
+      tool: {
+        pixi: {
+          conda: pixi.conda.map((item) =>
+            prependObjectPath(item, ['tool', 'pixi']),
+          ),
+          pypi: pixi.pypi.map((item) =>
+            prependObjectPath(item, ['tool', 'pixi']),
+          ),
+        },
+      },
     };
   });
 
