@@ -180,7 +180,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -200,7 +199,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -220,7 +218,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -240,7 +237,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -260,7 +256,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -280,7 +275,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -300,7 +294,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -320,7 +313,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -340,7 +332,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -360,7 +351,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -380,7 +370,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -400,7 +389,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -420,7 +408,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -440,7 +427,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -460,7 +446,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -480,7 +465,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
             ],
             "lockFiles": [],
@@ -576,7 +560,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channel": undefined,
@@ -600,7 +583,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channel": "channel of scipy",
@@ -656,7 +638,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "channels": [
@@ -680,7 +661,6 @@ describe('modules/manager/pixi/extract', () => {
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
                 "versioning": "conda",
-                "warnings": undefined,
               },
               {
                 "currentValue": "*",
@@ -811,7 +791,7 @@ describe('modules/manager/pixi/extract', () => {
         `
 [project]
 authors = ["Trim21 <trim21.me@gmail.com>"]
-channels = ["conda-forge"]
+channels = ["https://prefix.dev/conda-forge"]
 name = "pixi"
 platforms = ["win-64"]
 version = "0.1.0"
@@ -819,15 +799,7 @@ version = "0.1.0"
 [tasks]
 
 [dependencies]
-
-[feature.scipy]
-channels = ["anaconda", { channel = 'cuda', priority = 1 }, {channel='d', priority=-1}]
-
-[feature.scipy.dependencies]
-scipy = { version = "==1.15.1", channel = "channel of scipy" }
-
-[feature.scipy.target.win-64.dependencies]
-matplotlib = { version = "==3.10.0", channel = 'cuda' }
+scipy = { version = "==1.15.1" }
 `,
         'pixi.toml',
       ),
@@ -835,12 +807,9 @@ matplotlib = { version = "==3.10.0", channel = 'cuda' }
       {
         "deps": [
           {
-            "channel": "channel of scipy",
+            "channel": undefined,
             "channels": [
-              "cuda",
-              "anaconda",
-              "conda-forge",
-              "d",
+              "https://prefix.dev/conda-forge",
             ],
             "currentValue": "==1.15.1",
             "datasource": "conda",
@@ -848,43 +817,13 @@ matplotlib = { version = "==3.10.0", channel = 'cuda' }
             "depType": "dependencies",
             "managerData": {
               "path": [
-                "feature",
-                "scipy",
                 "dependencies",
                 "scipy",
                 "version",
               ],
             },
             "registryUrls": [
-              "https://api.anaconda.org/package/channel of scipy/",
-            ],
-            "versioning": "conda",
-          },
-          {
-            "channel": "cuda",
-            "channels": [
-              "cuda",
-              "anaconda",
-              "conda-forge",
-              "d",
-            ],
-            "currentValue": "==3.10.0",
-            "datasource": "conda",
-            "depName": "matplotlib",
-            "depType": "dependencies",
-            "managerData": {
-              "path": [
-                "feature",
-                "scipy",
-                "target",
-                "win-64",
-                "dependencies",
-                "matplotlib",
-                "version",
-              ],
-            },
-            "registryUrls": [
-              "https://api.anaconda.org/package/cuda/",
+              "https://prefix.dev/conda-forge/",
             ],
             "versioning": "conda",
           },

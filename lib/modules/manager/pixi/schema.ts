@@ -9,6 +9,7 @@ import * as condaVersion from '../../versioning/conda/';
 import { id as gitRefVersionID } from '../../versioning/git';
 import { id as pep440VersionID } from '../../versioning/pep440/';
 import type { PackageDependency } from '../types';
+import { ensureTrailingSlash } from '../../../util/url';
 
 export interface PixiManagerData {
   /**
@@ -74,7 +75,6 @@ const pypiDependencies = z
             managerData: { path: ['ref'] },
           } satisfies PixiPackageDependency;
         }),
-      // z.object({ url: z.string() }).transform(() => null),
       z.any().transform(() => null),
     ]),
   )
@@ -121,6 +121,7 @@ const condaDependencies = z
             channel,
           } satisfies PixiPackageDependency;
         }),
+      z.any().transform(() => null),
     ]),
   )
   .transform((val) => {
@@ -221,8 +222,6 @@ const DependencieSchemaMixin = z
  */
 export const PixiConfigSchema = z
   .object({
-    project: projectSchema,
-
     feature: LooseRecord(
       z.string(),
       z
@@ -273,6 +272,20 @@ export const PixiConfigSchema = z
       ),
   })
   .and(DependencieSchemaMixin)
+  .and(
+    z.union([
+      z
+        .object({
+          workspace: projectSchema,
+        })
+        .transform((val) => {
+          return { project: val.workspace };
+        }),
+      z.object({
+        project: projectSchema,
+      }),
+    ]),
+  )
   .transform(
     (
       val,
@@ -301,17 +314,6 @@ export const PixiConfigSchema = z
         .map((item) => {
           const channels = item.channels ? orderChannels(item.channels) : [];
           if (item.channel) {
-            // there is no reliable get versions from non-official channel except parse a huge repodata.json
-            // We will not do that, so just skip it.
-            if (looksLikeUrl(item.channel)) {
-              return {
-                ...item,
-                channels,
-                skipStage: 'extract',
-                skipReason: 'unsupported-datasource',
-              };
-            }
-
             return {
               ...item,
               channels,
@@ -331,19 +333,7 @@ export const PixiConfigSchema = z
           return {
             ...item,
             channels,
-
-            registryUrls: channels
-              .filter((c) => !looksLikeUrl(c))
-              .map(channelToRegistryUrl),
-            warnings: channels.some((c) => looksLikeUrl(c))
-              ? [
-                  {
-                    topic: 'conda',
-                    message:
-                      'using third part channel is not support by renovatebot and it will be ignored. This may cause renovatebot try to use package from channel with low priority',
-                  },
-                ]
-              : undefined,
+            registryUrls: channels.map(channelToRegistryUrl),
           } satisfies PixiPackageDependency;
         });
 
@@ -355,8 +345,8 @@ export const PixiConfigSchema = z
   );
 
 function channelToRegistryUrl(channel: string): string {
-  if (channel.startsWith('http://') || channel.startsWith('https://')) {
-    return channel;
+  if (looksLikeUrl(channel)) {
+    return ensureTrailingSlash(channel);
   }
 
   return defaultCondaRegistryAPi + channel + '/';
