@@ -1,4 +1,3 @@
-import { mockDeep } from 'vitest-mock-extended';
 import { join } from 'upath';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { mockDeep } from 'vitest-mock-extended';
