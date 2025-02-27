@@ -15,6 +15,7 @@ import { Result } from '../../../util/result';
 import type { UpdateArtifact, UpdateArtifactsResult } from '../types';
 import { commandLock, pickConfig } from './lockfile';
 import { LockfileYaml } from './schema';
+import { hash } from '../../../util/hash';
 
 export async function updateArtifacts({
   packageFileName,
@@ -51,10 +52,13 @@ export async function updateArtifacts({
       await deleteLocalFile(lockFileName);
     }
 
+    const PIXI_CACHE_DIR = await ensureCacheDir('pixi');
+
     const extraEnv = {
       ...getGitEnvironmentVariables(['pypi']),
       // https://pixi.sh/latest/features/environment/#caching-packages
-      PIXI_CACHE_DIR: await ensureCacheDir('pixi'),
+      PIXI_CACHE_DIR,
+      RATTLER_CACHE_DIR: PIXI_CACHE_DIR,
     };
 
     const execOptions: ExecOptions = {
