@@ -23,6 +23,7 @@ export const supportedRangeStrategies: RangeStrategy[] = [
   // TODO we should support more strategy but currently only pin
   'pin',
   'replace',
+  'bump',
 ];
 
 function isValidVersion(s: string): boolean {
@@ -63,13 +64,35 @@ function isSingleVersion(input: string): boolean {
   return isValidVersion(input.replace(/^==/, '').trimStart());
 }
 
-function getNewValue({
+function getNewValue(cfg: NewValueConfig): string | null {
+  return pep440.getNewValue(cfg);
+}
+
+export function getNewValue2({
   currentValue,
   rangeStrategy,
   currentVersion,
   newVersion,
   isReplacement,
 }: NewValueConfig): string | null {
+  if (rangeStrategy === 'bump') {
+    if (currentValue.includes('|') || currentValue.includes(',')) {
+      //  conda and/or, can't replace
+      return null;
+    }
+
+    if (rangeStrategy.startsWith('>=')) {
+      if (new VersionSpec(currentValue).matches(new Version(newVersion))) {
+        if (equals(currentValue.replace(/^>=/, ''), newVersion)) {
+          return null;
+        }
+        return '>=' + newVersion;
+      }
+
+      return null;
+    }
+  }
+
   if (rangeStrategy === 'pin') {
     if (!currentValue.trim()) {
       return '==' + newVersion;
@@ -112,7 +135,17 @@ function sortVersions(version: string, other: string): number {
   return new Version(version).compare(new Version(other));
 }
 
+function equals(version: string, other: string): boolean {
+  const v2 = parse(other);
+  if (!v2) {
+    return false;
+  }
+
+  return parse(version)?.equals(v2) ?? false;
+}
+
 export const api = {
+  equals,
   isValid,
   isVersion: isValidVersion,
   isSingleVersion,
@@ -143,14 +176,7 @@ export const api = {
       return null;
     }
   },
-  equals(version: string, other: string): boolean {
-    const v2 = parse(other);
-    if (!v2) {
-      return false;
-    }
 
-    return parse(version)?.equals(v2) ?? false;
-  },
   isGreaterThan(version: string, other: string): boolean {
     return sortVersions(version, other) > 0;
   },

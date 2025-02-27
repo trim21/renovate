@@ -48,6 +48,7 @@ const pypiDependencies = z
           currentValue: version,
           versioning: pep440VersionID,
           datasource: PypiDatasource.id,
+          depType: 'pypi-dependencies',
           managerData: { path: [] },
         } satisfies PixiPackageDependency;
       }),
@@ -56,6 +57,7 @@ const pypiDependencies = z
           currentValue: version,
           versioning: pep440VersionID,
           datasource: PypiDatasource.id,
+          depType: 'pypi-dependencies',
           managerData: { path: ['version'] },
         } satisfies PixiPackageDependency;
       }),
@@ -70,6 +72,7 @@ const pypiDependencies = z
           return {
             currentValue: rev,
             sourceUrl: git,
+            depType: 'pypi-dependencies',
             gitRef: true,
             versioning: gitRefVersionID,
             managerData: { path: ['ref'] },

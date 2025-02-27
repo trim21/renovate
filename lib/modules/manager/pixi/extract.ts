@@ -39,7 +39,8 @@ export async function extractPackageFile(
   content: string,
   packageFile: string,
 ): Promise<PackageFileContent | null> {
-  logger.trace(`pixi.extractPackageFile(${packageFile})`);
+  console.log(new Error().stack);
+  logger.info(`pixi.extractPackageFile(${packageFile})`);
 
   const config = getUserPixiConfig(content, packageFile);
   if (!config) {

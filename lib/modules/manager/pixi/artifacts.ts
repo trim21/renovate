@@ -15,7 +15,6 @@ import { Result } from '../../../util/result';
 import type { UpdateArtifact, UpdateArtifactsResult } from '../types';
 import { commandLock, pickConfig } from './lockfile';
 import { LockfileYaml } from './schema';
-import { hash } from '../../../util/hash';
 
 export async function updateArtifacts({
   packageFileName,
