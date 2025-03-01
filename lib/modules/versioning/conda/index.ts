@@ -2,7 +2,7 @@ import { Version, VersionSpec } from '@trim21/rattler';
 import type { SemVer } from 'semver';
 
 import type { RangeStrategy } from '../../../types/versioning';
-import pep440 from '../pep440';
+import * as pep440 from '../pep440';
 import type { NewValueConfig, VersioningApi } from '../types';
 
 function parse(v: string): Version | null {
@@ -19,12 +19,8 @@ export const urls = [
   'https://docs.conda.io/projects/conda-build/en/stable/resources/package-spec.html#package-match-specifications',
 ];
 export const supportsRanges = true;
-export const supportedRangeStrategies: RangeStrategy[] = [
-  // TODO we should support more strategy but currently only pin
-  'pin',
-  'replace',
-  'bump',
-];
+export const supportedRangeStrategies: RangeStrategy[] =
+  pep440.supportedRangeStrategies;
 
 function isValidVersion(s: string): boolean {
   try {
@@ -64,71 +60,8 @@ function isSingleVersion(input: string): boolean {
   return isValidVersion(input.replace(/^==/, '').trimStart());
 }
 
-function getNewValue(cfg: NewValueConfig): string | null {
-  return pep440.getNewValue(cfg);
-}
-
-export function getNewValue2({
-  currentValue,
-  rangeStrategy,
-  currentVersion,
-  newVersion,
-  isReplacement,
-}: NewValueConfig): string | null {
-  if (rangeStrategy === 'bump') {
-    if (currentValue.includes('|') || currentValue.includes(',')) {
-      //  conda and/or, can't replace
-      return null;
-    }
-
-    if (rangeStrategy.startsWith('>=')) {
-      if (new VersionSpec(currentValue).matches(new Version(newVersion))) {
-        if (equals(currentValue.replace(/^>=/, ''), newVersion)) {
-          return null;
-        }
-        return '>=' + newVersion;
-      }
-
-      return null;
-    }
-  }
-
-  if (rangeStrategy === 'pin') {
-    if (!currentValue.trim()) {
-      return '==' + newVersion;
-    }
-    // already pin
-    if (isSingleVersion(currentValue)) {
-      return '==' + newVersion;
-    }
-
-    if (matches(newVersion, currentValue)) {
-      return '==' + newVersion;
-    }
-
-    return null;
-  }
-
-  if (rangeStrategy === 'replace') {
-    if (currentValue.includes('|') || currentValue.includes(',')) {
-      //  conda and/or, can't replace
-      return null;
-    }
-
-    if (currentVersion) {
-      if (
-        ['==', '>'].some((item) => currentValue.startsWith(item)) &&
-        currentValue.includes(currentVersion)
-      ) {
-        return currentValue.replace(currentVersion, newVersion);
-      }
-    }
-
-    return null;
-  }
-
-  // TODO: not implement yet.
-  return null;
+function getNewValue(config: NewValueConfig): string | null {
+  return pep440.api.getNewValue(config);
 }
 
 function sortVersions(version: string, other: string): number {
@@ -171,7 +104,7 @@ export const api = {
   // so we try to use pep440 get a patch version.
   getPatch(version: string | SemVer): null | number {
     try {
-      return pep440.getPatch(version);
+      return pep440.api.getPatch(version);
     } catch {
       return null;
     }
