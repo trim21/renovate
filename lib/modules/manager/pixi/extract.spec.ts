@@ -563,19 +563,35 @@ describe('modules/manager/pixi/extract', () => {
       expect(
         await extractPackageFile(
           codeBlock`
-          [tool.project]
+          [tool.pixi.project]
           channels = ['conda-forge']
           platforms = ["osx-arm64"]
 
-          [tool.project.dependencies]
+          [tool.pixi.dependencies]
           requests = '*'
           `,
           'not-sure-what-file-this-is.toml',
         ),
-      ).toMatchObject({
-        deps: [],
-        lockFiles: [],
-      });
+      ).toMatchInlineSnapshot(`
+        {
+          "deps": [
+            {
+              "channels": [
+                "conda-forge",
+              ],
+              "currentValue": "*",
+              "datasource": "conda",
+              "depName": "requests",
+              "depType": "dependencies",
+              "registryUrls": [
+                "https://api.anaconda.org/package/conda-forge/",
+              ],
+              "versioning": "conda",
+            },
+          ],
+          "lockFiles": [],
+        }
+      `);
     });
 
     it('returns parse non-known config file as pixi.toml', async () => {
@@ -591,10 +607,26 @@ describe('modules/manager/pixi/extract', () => {
         `,
           'not-sure-what-file-this-is.toml',
         ),
-      ).toMatchObject({
-        deps: [],
-        lockFiles: [],
-      });
+      ).toMatchInlineSnapshot(`
+        {
+          "deps": [
+            {
+              "channels": [
+                "conda-forge",
+              ],
+              "currentValue": "*",
+              "datasource": "conda",
+              "depName": "requests",
+              "depType": "dependencies",
+              "registryUrls": [
+                "https://api.anaconda.org/package/conda-forge/",
+              ],
+              "versioning": "conda",
+            },
+          ],
+          "lockFiles": [],
+        }
+      `);
     });
   });
 
