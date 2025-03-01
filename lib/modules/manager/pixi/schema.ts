@@ -2,6 +2,7 @@ import is from '@sindresorhus/is';
 import { z } from 'zod';
 import { isNotNullOrUndefined } from '../../../util/array';
 import { LooseRecord, Toml, Yaml } from '../../../util/schema-utils';
+import { ensureTrailingSlash } from '../../../util/url';
 import { CondaDatasource } from '../../datasource/conda/';
 import { defaultRegistryUrl as defaultCondaRegistryAPi } from '../../datasource/conda/common';
 import { PypiDatasource } from '../../datasource/pypi';
@@ -9,7 +10,6 @@ import * as condaVersion from '../../versioning/conda/';
 import { id as gitRefVersionID } from '../../versioning/git';
 import { id as pep440VersionID } from '../../versioning/pep440/';
 import type { PackageDependency } from '../types';
-import { ensureTrailingSlash } from '../../../util/url';
 
 type Channel = string | { channel: string; priority: number };
 type Channels = Channel[];
@@ -17,6 +17,23 @@ type Channels = Channel[];
 export interface PixiPackageDependency extends PackageDependency {
   channel?: string;
   channels?: (string | { channel: string; priority: number })[];
+}
+
+function collectNamedPackages(
+  packages: Record<string, PackageDependency | null>,
+): PackageDependency[] {
+  return Object.entries(packages)
+    .map(([depName, config]) => {
+      if (is.nullOrUndefined(config)) {
+        return;
+      }
+
+      return {
+        ...config,
+        depName,
+      };
+    })
+    .filter((dep) => isNotNullOrUndefined(dep));
 }
 
 const pypiDependencies = z
@@ -58,20 +75,7 @@ const pypiDependencies = z
       z.any().transform(() => null),
     ]),
   )
-  .transform((val) => {
-    return Object.entries(val)
-      .map(([depName, config]) => {
-        if (is.nullOrUndefined(config)) {
-          return;
-        }
-
-        return {
-          ...config,
-          depName,
-        };
-      })
-      .filter((dep) => isNotNullOrUndefined(dep));
-  });
+  .transform(collectNamedPackages);
 
 const condaDependencies = z
   .record(
@@ -99,20 +103,7 @@ const condaDependencies = z
       z.any().transform(() => null),
     ]),
   )
-  .transform((val) => {
-    return Object.entries(val)
-      .map(([depName, config]) => {
-        if (is.nullOrUndefined(config)) {
-          return;
-        }
-
-        return {
-          ...config,
-          depName,
-        };
-      })
-      .filter((dep) => isNotNullOrUndefined(dep));
-  });
+  .transform(collectNamedPackages);
 
 const Targets = LooseRecord(
   z.string(),
