@@ -292,20 +292,6 @@ function looksLikeUrl(s: string): boolean {
 
 export type PixiConfig = z.infer<typeof PixiConfigSchema>;
 
-export const PyprojectSchema = z
-  .object({
-    tool: z.object({ pixi: PixiConfigSchema.optional() }).optional(),
-  })
-  .default({})
-  .transform(({ tool: { pixi } = {} } = {}) => {
-    if (!pixi) {
-      return { tool: { pixi: null } };
-    }
-
-    return { tool: { pixi } };
-  });
-
-export const PyprojectToml = Toml.pipe(PyprojectSchema);
 export const PixiToml = Toml.pipe(PixiConfigSchema);
 
 export const LockfileYaml = Yaml.pipe(
