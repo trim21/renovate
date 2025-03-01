@@ -535,19 +535,19 @@ describe('modules/manager/pixi/extract', () => {
   it('extract feature with channels', async () => {
     await expect(
       extractPackageFile(
-        `
-[project]
-authors = ["Trim21 <trim21.me@gmail.com>"]
-channels = ["https://prefix.dev/conda-forge"]
-name = "pixi"
-platforms = ["win-64"]
-version = "0.1.0"
+        codeBlock`
+          [project]
+          authors = ["Trim21 <trim21.me@gmail.com>"]
+          channels = ["https://prefix.dev/conda-forge"]
+          name = "pixi"
+          platforms = ["win-64"]
+          version = "0.1.0"
 
-[tasks]
+          [tasks]
 
-[dependencies]
-scipy = { version = "==1.15.1" }
-`,
+          [dependencies]
+          scipy = { version = "==1.15.1" }
+          `,
         'pixi.toml',
       ),
     ).resolves.toMatchObject({
