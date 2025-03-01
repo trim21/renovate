@@ -53,9 +53,8 @@ export async function updateArtifacts({
 
     const PIXI_CACHE_DIR = await ensureCacheDir('pixi');
 
+    // https://pixi.sh/latest/features/environment/#caching-packages
     const extraEnv = {
-      ...getGitEnvironmentVariables(['pypi']),
-      // https://pixi.sh/latest/features/environment/#caching-packages
       PIXI_CACHE_DIR,
       RATTLER_CACHE_DIR: PIXI_CACHE_DIR,
     };

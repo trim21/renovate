@@ -170,12 +170,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "python",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "python",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -189,12 +183,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "geographiclib",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "geographiclib",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -208,12 +196,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "geopy",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "geopy",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -227,12 +209,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "cartopy",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "cartopy",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -246,12 +222,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "pydantic",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "pydantic",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -265,12 +235,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "matplotlib",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "matplotlib",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -284,12 +248,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "pyqt",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "pyqt",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -303,12 +261,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "pandas",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "pandas",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -322,12 +274,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "python-dateutil",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "python-dateutil",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -341,12 +287,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "rich",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "rich",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -360,12 +300,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "scipy",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "scipy",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -379,12 +313,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "tqdm",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "tqdm",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -398,12 +326,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "tzdata",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "tzdata",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -417,12 +339,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "numpy",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "numpy",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -436,12 +352,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "adjusttext",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "adjusttext",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -455,12 +365,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "iris",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "iris",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                 ],
@@ -484,15 +388,7 @@ describe('modules/manager/pixi/extract', () => {
                 "currentValue": "*",
                 "datasource": "pypi",
                 "depName": "requests",
-                "managerData": {
-                  "path": [
-                    "tool",
-                    "pixi",
-                    "pypi-dependencies",
-                    "requests",
-                    "version",
-                  ],
-                },
+                "depType": "pypi-dependencies",
                 "versioning": "pep440",
               },
             ],
@@ -515,15 +411,7 @@ describe('modules/manager/pixi/extract', () => {
                 "currentValue": "*",
                 "datasource": "pypi",
                 "depName": "requests",
-                "managerData": {
-                  "path": [
-                    "tool",
-                    "pixi",
-                    "pypi-dependencies",
-                    "requests",
-                    "version",
-                  ],
-                },
+                "depType": "pypi-dependencies",
                 "versioning": "pep440",
               },
             ],
@@ -549,12 +437,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "python",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "python",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                   "https://api.anaconda.org/package/conda-not-forge/",
@@ -571,13 +453,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "numpy",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "dependencies",
-                    "numpy",
-                    "version",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                   "https://api.anaconda.org/package/conda-not-forge/",
@@ -587,8 +462,6 @@ describe('modules/manager/pixi/extract', () => {
               {
                 "channel": "channel of scipy",
                 "channels": [
-                  "cuda",
-                  "anaconda",
                   "conda-forge",
                   "conda-not-forge",
                 ],
@@ -596,15 +469,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "scipy",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "feature",
-                    "scipy",
-                    "dependencies",
-                    "scipy",
-                    "version",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/channel of scipy/",
                 ],
@@ -612,8 +476,6 @@ describe('modules/manager/pixi/extract', () => {
               },
               {
                 "channels": [
-                  "cuda",
-                  "anaconda",
                   "conda-forge",
                   "conda-not-forge",
                 ],
@@ -621,19 +483,7 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "matplotlib",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "feature",
-                    "scipy",
-                    "target",
-                    "win-64",
-                    "dependencies",
-                    "matplotlib",
-                  ],
-                },
                 "registryUrls": [
-                  "https://api.anaconda.org/package/cuda/",
-                  "https://api.anaconda.org/package/anaconda/",
                   "https://api.anaconda.org/package/conda-forge/",
                   "https://api.anaconda.org/package/conda-not-forge/",
                 ],
@@ -648,14 +498,6 @@ describe('modules/manager/pixi/extract', () => {
                 "datasource": "conda",
                 "depName": "ruff",
                 "depType": "dependencies",
-                "managerData": {
-                  "path": [
-                    "feature",
-                    "lint",
-                    "dependencies",
-                    "ruff",
-                  ],
-                },
                 "registryUrls": [
                   "https://api.anaconda.org/package/conda-forge/",
                   "https://api.anaconda.org/package/conda-not-forge/",
@@ -666,115 +508,57 @@ describe('modules/manager/pixi/extract', () => {
                 "currentValue": "*",
                 "datasource": "pypi",
                 "depName": "requests",
-                "managerData": {
-                  "path": [
-                    "pypi-dependencies",
-                    "requests",
-                  ],
-                },
+                "depType": "pypi-dependencies",
                 "versioning": "pep440",
               },
               {
                 "currentValue": "*",
                 "datasource": "pypi",
                 "depName": "requests2",
-                "managerData": {
-                  "path": [
-                    "pypi-dependencies",
-                    "requests2",
-                    "version",
-                  ],
-                },
+                "depType": "pypi-dependencies",
                 "versioning": "pep440",
               },
               {
                 "currentValue": "*",
                 "datasource": "pypi",
                 "depName": "urllib3",
-                "managerData": {
-                  "path": [
-                    "target",
-                    "win-64",
-                    "pypi-dependencies",
-                    "urllib3",
-                    "version",
-                  ],
-                },
+                "depType": "pypi-dependencies",
                 "versioning": "pep440",
               },
               {
                 "currentValue": "*",
                 "datasource": "pypi",
                 "depName": "flake8",
-                "managerData": {
-                  "path": [
-                    "feature",
-                    "lint",
-                    "pypi-dependencies",
-                    "flake8",
-                  ],
-                },
+                "depType": "pypi-dependencies",
                 "versioning": "pep440",
               },
               {
                 "currentValue": "==25.*",
                 "datasource": "pypi",
                 "depName": "black",
-                "managerData": {
-                  "path": [
-                    "feature",
-                    "lint",
-                    "target",
-                    "win-64",
-                    "pypi-dependencies",
-                    "black",
-                  ],
-                },
+                "depType": "pypi-dependencies",
                 "versioning": "pep440",
               },
               {
                 "currentValue": ">0",
                 "datasource": "pypi",
                 "depName": "black",
-                "managerData": {
-                  "path": [
-                    "feature",
-                    "test",
-                    "pypi-dependencies",
-                    "black",
-                  ],
-                },
+                "depType": "pypi-dependencies",
                 "versioning": "pep440",
               },
               {
                 "currentValue": "0106aced5faa299e6ede89d1230bd6784f2c3660",
                 "depName": "requests",
+                "depType": "pypi-dependencies",
                 "gitRef": true,
-                "managerData": {
-                  "path": [
-                    "feature",
-                    "test",
-                    "pypi-dependencies",
-                    "requests",
-                    "ref",
-                  ],
-                },
                 "sourceUrl": "https://github.com/psf/requests.git",
                 "versioning": "git",
               },
               {
                 "currentValue": "v0.3.0",
                 "depName": "pytest-github-actions-annotate-failures",
+                "depType": "pypi-dependencies",
                 "gitRef": true,
-                "managerData": {
-                  "path": [
-                    "feature",
-                    "test",
-                    "pypi-dependencies",
-                    "pytest-github-actions-annotate-failures",
-                    "ref",
-                  ],
-                },
                 "sourceUrl": "https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git",
                 "versioning": "git",
               },
@@ -815,13 +599,6 @@ scipy = { version = "==1.15.1" }
             "datasource": "conda",
             "depName": "scipy",
             "depType": "dependencies",
-            "managerData": {
-              "path": [
-                "dependencies",
-                "scipy",
-                "version",
-              ],
-            },
             "registryUrls": [
               "https://prefix.dev/conda-forge/",
             ],

@@ -11,32 +11,12 @@ import { id as pep440VersionID } from '../../versioning/pep440/';
 import type { PackageDependency } from '../types';
 import { ensureTrailingSlash } from '../../../util/url';
 
-export interface PixiManagerData {
-  /**
-   * object path to version string
-   */
-  path: (string | number)[];
-}
-
 type Channel = string | { channel: string; priority: number };
 type Channels = Channel[];
 
 export interface PixiPackageDependency extends PackageDependency {
   channel?: string;
   channels?: (string | { channel: string; priority: number })[];
-  managerData: PixiManagerData;
-}
-
-function prependObjectPath(
-  item: PixiPackageDependency,
-  path: (string | number)[],
-): PixiPackageDependency {
-  return {
-    ...item,
-    managerData: {
-      path: [...path, ...item.managerData.path],
-    },
-  };
 }
 
 const pypiDependencies = z
@@ -49,7 +29,6 @@ const pypiDependencies = z
           versioning: pep440VersionID,
           datasource: PypiDatasource.id,
           depType: 'pypi-dependencies',
-          managerData: { path: [] },
         } satisfies PixiPackageDependency;
       }),
       z.object({ version: z.string() }).transform(({ version }) => {
@@ -58,7 +37,6 @@ const pypiDependencies = z
           versioning: pep440VersionID,
           datasource: PypiDatasource.id,
           depType: 'pypi-dependencies',
-          managerData: { path: ['version'] },
         } satisfies PixiPackageDependency;
       }),
       z
@@ -75,7 +53,6 @@ const pypiDependencies = z
             depType: 'pypi-dependencies',
             gitRef: true,
             versioning: gitRefVersionID,
-            managerData: { path: ['ref'] },
           } satisfies PixiPackageDependency;
         }),
       z.any().transform(() => null),
@@ -88,13 +65,10 @@ const pypiDependencies = z
           return;
         }
 
-        return prependObjectPath(
-          {
-            ...config,
-            depName,
-          },
-          [depName],
-        );
+        return {
+          ...config,
+          depName,
+        };
       })
       .filter((dep) => isNotNullOrUndefined(dep));
   });
@@ -109,7 +83,6 @@ const condaDependencies = z
           versioning: condaVersion.id,
           datasource: CondaDatasource.id,
           depType: 'dependencies',
-          managerData: { path: [] },
         } satisfies PixiPackageDependency;
       }),
       z
@@ -119,7 +92,6 @@ const condaDependencies = z
             currentValue: version,
             versioning: condaVersion.id,
             datasource: CondaDatasource.id,
-            managerData: { path: ['version'] },
             depType: 'dependencies',
             channel,
           } satisfies PixiPackageDependency;
@@ -134,13 +106,10 @@ const condaDependencies = z
           return;
         }
 
-        return prependObjectPath(
-          {
-            ...config,
-            depName,
-          },
-          [depName],
-        );
+        return {
+          ...config,
+          depName,
+        };
       })
       .filter((dep) => isNotNullOrUndefined(dep));
   });
@@ -148,31 +117,16 @@ const condaDependencies = z
 const Targets = LooseRecord(
   z.string(),
   z.object({
-    dependencies: z
-      .optional(condaDependencies)
-      .default({})
-      .transform((val) => {
-        return val.map((item) => prependObjectPath(item, ['dependencies']));
-      }),
-    'pypi-dependencies': z.optional(pypiDependencies).transform((val) => {
-      return (
-        val?.map((item) => prependObjectPath(item, ['pypi-dependencies'])) ?? []
-      );
-    }),
+    dependencies: z.optional(condaDependencies).default({}),
+    'pypi-dependencies': z.optional(pypiDependencies).default({}),
   }),
 ).transform((val) => {
   const conda: PixiPackageDependency[] = [];
   const pypi: PixiPackageDependency[] = [];
-  for (const [key, value] of Object.entries(val)) {
-    pypi.push(
-      ...value['pypi-dependencies'].map((item) =>
-        prependObjectPath(item, [key]),
-      ),
-    );
+  for (const value of Object.values(val)) {
+    pypi.push(...value['pypi-dependencies']);
 
-    conda.push(
-      ...value.dependencies.map((item) => prependObjectPath(item, [key])),
-    );
+    conda.push(...value.dependencies);
   }
 
   return { pypi, conda };
@@ -184,30 +138,9 @@ const projectSchema = z.object({
 
 const DependencieSchemaMixin = z
   .object({
-    dependencies: z
-      .optional(condaDependencies)
-      .default({})
-      .transform((val) => {
-        return val.map((item) => prependObjectPath(item, ['dependencies']));
-      }),
-    'pypi-dependencies': z
-      .optional(pypiDependencies)
-      .default({})
-      .transform((val) => {
-        return val.map((item) =>
-          prependObjectPath(item, ['pypi-dependencies']),
-        );
-      }),
-
-    target: z
-      .optional(Targets)
-      .default({})
-      .transform(({ pypi, conda }) => {
-        return {
-          conda: conda.map((item) => prependObjectPath(item, ['target'])),
-          pypi: pypi.map((item) => prependObjectPath(item, ['target'])),
-        };
-      }),
+    dependencies: z.optional(condaDependencies).default({}),
+    'pypi-dependencies': z.optional(pypiDependencies).default({}),
+    target: z.optional(Targets).default({}),
   })
   .transform(
     (
@@ -251,23 +184,10 @@ export const PixiConfigSchema = z
           const pypi: PixiPackageDependency[] = [];
           const conda: PixiPackageDependency[] = [];
 
-          for (const [name, feature] of Object.entries(features)) {
-            conda.push(
-              ...feature.conda.map((item) => {
-                return {
-                  ...prependObjectPath(item, ['feature', name]),
-                  channels: feature.channels,
-                };
-              }),
-            );
+          for (const feature of Object.values(features)) {
+            conda.push(...feature.conda);
 
-            pypi.push(
-              ...feature.pypi.map((item) => {
-                return {
-                  ...prependObjectPath(item, ['feature', name]),
-                };
-              }),
-            );
+            pypi.push(...feature.pypi);
           }
 
           return { pypi, conda };
@@ -391,18 +311,7 @@ export const PyprojectSchema = z
       return { tool: { pixi: null } };
     }
 
-    return {
-      tool: {
-        pixi: {
-          conda: pixi.conda.map((item) =>
-            prependObjectPath(item, ['tool', 'pixi']),
-          ),
-          pypi: pixi.pypi.map((item) =>
-            prependObjectPath(item, ['tool', 'pixi']),
-          ),
-        },
-      },
-    };
+    return { tool: { pixi } };
   });
 
 export const PyprojectToml = Toml.pipe(PyprojectSchema);
