@@ -149,414 +149,328 @@ describe('modules/manager/pixi/extract', () => {
     });
 
     it('returns parse pixi.toml', async () => {
-      expect(await extractPackageFile(pixiToml, 'pixi.toml'))
-        .toMatchInlineSnapshot(`
+      expect(await extractPackageFile(pixiToml, 'pixi.toml')).toMatchObject({
+        deps: [
           {
-            "deps": [
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": "3.12.*",
-                "datasource": "conda",
-                "depName": "python",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=2.0,<3",
-                "datasource": "conda",
-                "depName": "geographiclib",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=2.4.1,<3",
-                "datasource": "conda",
-                "depName": "geopy",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=0.24.0,<0.25",
-                "datasource": "conda",
-                "depName": "cartopy",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": "2.*",
-                "datasource": "conda",
-                "depName": "pydantic",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=3.10.0,<4",
-                "datasource": "conda",
-                "depName": "matplotlib",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=5.15.9,<6",
-                "datasource": "conda",
-                "depName": "pyqt",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=2.2.3,<3",
-                "datasource": "conda",
-                "depName": "pandas",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=2.9.0.post0,<3",
-                "datasource": "conda",
-                "depName": "python-dateutil",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=13.9.4,<14",
-                "datasource": "conda",
-                "depName": "rich",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=1.15.2,<2",
-                "datasource": "conda",
-                "depName": "scipy",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=4.67.1,<5",
-                "datasource": "conda",
-                "depName": "tqdm",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=2025a",
-                "datasource": "conda",
-                "depName": "tzdata",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": "2.*",
-                "datasource": "conda",
-                "depName": "numpy",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=1.3.0,<2",
-                "datasource": "conda",
-                "depName": "adjusttext",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                ],
-                "currentValue": ">=3.11.1,<4",
-                "datasource": "conda",
-                "depName": "iris",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                ],
-                "versioning": "conda",
-              },
-            ],
-            "lockFiles": [],
-          }
-        `);
+            channels: ['conda-forge'],
+            currentValue: '3.12.*',
+            datasource: 'conda',
+            depName: 'python',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=2.0,<3',
+            datasource: 'conda',
+            depName: 'geographiclib',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=2.4.1,<3',
+            datasource: 'conda',
+            depName: 'geopy',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=0.24.0,<0.25',
+            datasource: 'conda',
+            depName: 'cartopy',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '2.*',
+            datasource: 'conda',
+            depName: 'pydantic',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=3.10.0,<4',
+            datasource: 'conda',
+            depName: 'matplotlib',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=5.15.9,<6',
+            datasource: 'conda',
+            depName: 'pyqt',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=2.2.3,<3',
+            datasource: 'conda',
+            depName: 'pandas',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=2.9.0.post0,<3',
+            datasource: 'conda',
+            depName: 'python-dateutil',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=13.9.4,<14',
+            datasource: 'conda',
+            depName: 'rich',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=1.15.2,<2',
+            datasource: 'conda',
+            depName: 'scipy',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=4.67.1,<5',
+            datasource: 'conda',
+            depName: 'tqdm',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=2025a',
+            datasource: 'conda',
+            depName: 'tzdata',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '2.*',
+            datasource: 'conda',
+            depName: 'numpy',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=1.3.0,<2',
+            datasource: 'conda',
+            depName: 'adjusttext',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge'],
+            currentValue: '>=3.11.1,<4',
+            datasource: 'conda',
+            depName: 'iris',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+        ],
+        lockFiles: [],
+      });
     });
 
     it('returns parse pixi section from pyproject.toml', async () => {
       fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
       fs.localPathExists.mockReturnValueOnce(Promise.resolve(true));
 
-      expect(await extractPackageFile(pyprojectToml, 'pyproject.toml'))
-        .toMatchInlineSnapshot(`
+      expect(
+        await extractPackageFile(pyprojectToml, 'pyproject.toml'),
+      ).toMatchObject({
+        deps: [
           {
-            "deps": [
-              {
-                "currentValue": "*",
-                "datasource": "pypi",
-                "depName": "requests",
-                "depType": "pypi-dependencies",
-                "versioning": "pep440",
-              },
-            ],
-            "lockFiles": [
-              "pixi.lock",
-            ],
-          }
-        `);
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'requests',
+            depType: 'pypi-dependencies',
+            versioning: 'pep440',
+          },
+        ],
+        lockFiles: ['pixi.lock'],
+      });
     });
 
     it('returns package of pyproject.toml tool.pixi section', async () => {
       fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
       fs.localPathExists.mockReturnValueOnce(Promise.resolve(false));
 
-      expect(await extractPackageFile(pyprojectToml, 'pyproject.toml'))
-        .toMatchInlineSnapshot(`
+      expect(
+        await extractPackageFile(pyprojectToml, 'pyproject.toml'),
+      ).toMatchObject({
+        deps: [
           {
-            "deps": [
-              {
-                "currentValue": "*",
-                "datasource": "pypi",
-                "depName": "requests",
-                "depType": "pypi-dependencies",
-                "versioning": "pep440",
-              },
-            ],
-            "lockFiles": [],
-          }
-        `);
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'requests',
+            depType: 'pypi-dependencies',
+            versioning: 'pep440',
+          },
+        ],
+        lockFiles: [],
+      });
     });
 
     it('returns parse pixi.toml with features', async () => {
       fs.getSiblingFileName.mockReturnValueOnce('pixi.lock');
       fs.localPathExists.mockReturnValueOnce(Promise.resolve(false));
 
-      expect(await extractPackageFile(fullPixiConfig, 'pixi.toml'))
-        .toMatchInlineSnapshot(`
+      expect(
+        await extractPackageFile(fullPixiConfig, 'pixi.toml'),
+      ).toMatchObject({
+        deps: [
           {
-            "deps": [
-              {
-                "channels": [
-                  "conda-forge",
-                  "conda-not-forge",
-                ],
-                "currentValue": "==3.12",
-                "datasource": "conda",
-                "depName": "python",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                  "https://api.anaconda.org/package/conda-not-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channel": undefined,
-                "channels": [
-                  "conda-forge",
-                  "conda-not-forge",
-                ],
-                "currentValue": "*",
-                "datasource": "conda",
-                "depName": "numpy",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                  "https://api.anaconda.org/package/conda-not-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channel": "channel of scipy",
-                "channels": [
-                  "conda-forge",
-                  "conda-not-forge",
-                ],
-                "currentValue": "==1.15.1",
-                "datasource": "conda",
-                "depName": "scipy",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/channel of scipy/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                  "conda-not-forge",
-                ],
-                "currentValue": "==3.10.0",
-                "datasource": "conda",
-                "depName": "matplotlib",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                  "https://api.anaconda.org/package/conda-not-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "channels": [
-                  "conda-forge",
-                  "conda-not-forge",
-                ],
-                "currentValue": "==0.9.7",
-                "datasource": "conda",
-                "depName": "ruff",
-                "depType": "dependencies",
-                "registryUrls": [
-                  "https://api.anaconda.org/package/conda-forge/",
-                  "https://api.anaconda.org/package/conda-not-forge/",
-                ],
-                "versioning": "conda",
-              },
-              {
-                "currentValue": "*",
-                "datasource": "pypi",
-                "depName": "requests",
-                "depType": "pypi-dependencies",
-                "versioning": "pep440",
-              },
-              {
-                "currentValue": "*",
-                "datasource": "pypi",
-                "depName": "requests2",
-                "depType": "pypi-dependencies",
-                "versioning": "pep440",
-              },
-              {
-                "currentValue": "*",
-                "datasource": "pypi",
-                "depName": "urllib3",
-                "depType": "pypi-dependencies",
-                "versioning": "pep440",
-              },
-              {
-                "currentValue": "*",
-                "datasource": "pypi",
-                "depName": "flake8",
-                "depType": "pypi-dependencies",
-                "versioning": "pep440",
-              },
-              {
-                "currentValue": "==25.*",
-                "datasource": "pypi",
-                "depName": "black",
-                "depType": "pypi-dependencies",
-                "versioning": "pep440",
-              },
-              {
-                "currentValue": ">0",
-                "datasource": "pypi",
-                "depName": "black",
-                "depType": "pypi-dependencies",
-                "versioning": "pep440",
-              },
-              {
-                "currentValue": "0106aced5faa299e6ede89d1230bd6784f2c3660",
-                "depName": "requests",
-                "depType": "pypi-dependencies",
-                "gitRef": true,
-                "sourceUrl": "https://github.com/psf/requests.git",
-                "versioning": "git",
-              },
-              {
-                "currentValue": "v0.3.0",
-                "depName": "pytest-github-actions-annotate-failures",
-                "depType": "pypi-dependencies",
-                "gitRef": true,
-                "sourceUrl": "https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git",
-                "versioning": "git",
-              },
+            channels: ['conda-forge', 'conda-not-forge'],
+            currentValue: '==3.12',
+            datasource: 'conda',
+            depName: 'python',
+            depType: 'dependencies',
+            registryUrls: [
+              'https://api.anaconda.org/package/conda-forge/',
+              'https://api.anaconda.org/package/conda-not-forge/',
             ],
-            "lockFiles": [],
-          }
-        `);
+            versioning: 'conda',
+          },
+          {
+            channel: undefined,
+            channels: ['conda-forge', 'conda-not-forge'],
+            currentValue: '*',
+            datasource: 'conda',
+            depName: 'numpy',
+            depType: 'dependencies',
+            registryUrls: [
+              'https://api.anaconda.org/package/conda-forge/',
+              'https://api.anaconda.org/package/conda-not-forge/',
+            ],
+            versioning: 'conda',
+          },
+          {
+            channel: 'channel of scipy',
+            channels: ['conda-forge', 'conda-not-forge'],
+            currentValue: '==1.15.1',
+            datasource: 'conda',
+            depName: 'scipy',
+            depType: 'dependencies',
+            registryUrls: [
+              'https://api.anaconda.org/package/channel of scipy/',
+            ],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge', 'conda-not-forge'],
+            currentValue: '==3.10.0',
+            datasource: 'conda',
+            depName: 'matplotlib',
+            depType: 'dependencies',
+            registryUrls: [
+              'https://api.anaconda.org/package/conda-forge/',
+              'https://api.anaconda.org/package/conda-not-forge/',
+            ],
+            versioning: 'conda',
+          },
+          {
+            channels: ['conda-forge', 'conda-not-forge'],
+            currentValue: '==0.9.7',
+            datasource: 'conda',
+            depName: 'ruff',
+            depType: 'dependencies',
+            registryUrls: [
+              'https://api.anaconda.org/package/conda-forge/',
+              'https://api.anaconda.org/package/conda-not-forge/',
+            ],
+            versioning: 'conda',
+          },
+          {
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'requests',
+            depType: 'pypi-dependencies',
+            versioning: 'pep440',
+          },
+          {
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'requests2',
+            depType: 'pypi-dependencies',
+            versioning: 'pep440',
+          },
+          {
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'urllib3',
+            depType: 'pypi-dependencies',
+            versioning: 'pep440',
+          },
+          {
+            currentValue: '*',
+            datasource: 'pypi',
+            depName: 'flake8',
+            depType: 'pypi-dependencies',
+            versioning: 'pep440',
+          },
+          {
+            currentValue: '==25.*',
+            datasource: 'pypi',
+            depName: 'black',
+            depType: 'pypi-dependencies',
+            versioning: 'pep440',
+          },
+          {
+            currentValue: '>0',
+            datasource: 'pypi',
+            depName: 'black',
+            depType: 'pypi-dependencies',
+            versioning: 'pep440',
+          },
+          {
+            currentValue: '0106aced5faa299e6ede89d1230bd6784f2c3660',
+            depName: 'requests',
+            depType: 'pypi-dependencies',
+            gitRef: true,
+            sourceUrl: 'https://github.com/psf/requests.git',
+            versioning: 'git',
+          },
+          {
+            currentValue: 'v0.3.0',
+            depName: 'pytest-github-actions-annotate-failures',
+            depType: 'pypi-dependencies',
+            gitRef: true,
+            sourceUrl:
+              'https://github.com/pytest-dev/pytest-github-actions-annotate-failures.git',
+            versioning: 'git',
+          },
+        ],
+        lockFiles: [],
+      });
     });
 
     it('returns parse non-known config file as pyproject.toml', async () => {
@@ -572,26 +486,20 @@ describe('modules/manager/pixi/extract', () => {
           `,
           'not-sure-what-file-this-is.toml',
         ),
-      ).toMatchInlineSnapshot(`
-        {
-          "deps": [
-            {
-              "channels": [
-                "conda-forge",
-              ],
-              "currentValue": "*",
-              "datasource": "conda",
-              "depName": "requests",
-              "depType": "dependencies",
-              "registryUrls": [
-                "https://api.anaconda.org/package/conda-forge/",
-              ],
-              "versioning": "conda",
-            },
-          ],
-          "lockFiles": [],
-        }
-      `);
+      ).toMatchObject({
+        deps: [
+          {
+            channels: ['conda-forge'],
+            currentValue: '*',
+            datasource: 'conda',
+            depName: 'requests',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+        ],
+        lockFiles: [],
+      });
     });
 
     it('returns parse non-known config file as pixi.toml', async () => {
@@ -607,26 +515,20 @@ describe('modules/manager/pixi/extract', () => {
         `,
           'not-sure-what-file-this-is.toml',
         ),
-      ).toMatchInlineSnapshot(`
-        {
-          "deps": [
-            {
-              "channels": [
-                "conda-forge",
-              ],
-              "currentValue": "*",
-              "datasource": "conda",
-              "depName": "requests",
-              "depType": "dependencies",
-              "registryUrls": [
-                "https://api.anaconda.org/package/conda-forge/",
-              ],
-              "versioning": "conda",
-            },
-          ],
-          "lockFiles": [],
-        }
-      `);
+      ).toMatchObject({
+        deps: [
+          {
+            channels: ['conda-forge'],
+            currentValue: '*',
+            datasource: 'conda',
+            depName: 'requests',
+            depType: 'dependencies',
+            registryUrls: ['https://api.anaconda.org/package/conda-forge/'],
+            versioning: 'conda',
+          },
+        ],
+        lockFiles: [],
+      });
     });
   });
 
@@ -648,26 +550,20 @@ scipy = { version = "==1.15.1" }
 `,
         'pixi.toml',
       ),
-    ).resolves.toMatchInlineSnapshot(`
-      {
-        "deps": [
-          {
-            "channel": undefined,
-            "channels": [
-              "https://prefix.dev/conda-forge",
-            ],
-            "currentValue": "==1.15.1",
-            "datasource": "conda",
-            "depName": "scipy",
-            "depType": "dependencies",
-            "registryUrls": [
-              "https://prefix.dev/conda-forge/",
-            ],
-            "versioning": "conda",
-          },
-        ],
-        "lockFiles": [],
-      }
-    `);
+    ).resolves.toMatchObject({
+      deps: [
+        {
+          channel: undefined,
+          channels: ['https://prefix.dev/conda-forge'],
+          currentValue: '==1.15.1',
+          datasource: 'conda',
+          depName: 'scipy',
+          depType: 'dependencies',
+          registryUrls: ['https://prefix.dev/conda-forge/'],
+          versioning: 'conda',
+        },
+      ],
+      lockFiles: [],
+    });
   });
 });
