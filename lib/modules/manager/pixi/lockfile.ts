@@ -6,9 +6,7 @@
  * We do not support pixi<0.40.0 so version<6 is ignored.
  *
  */
-const pixiGenerateLockFileVersion: Config[] = [
-  { lockVersion: 6, range: '>=0.40.0, <0.45.0a0' },
-] as const;
+const pixiGenerateLockFileVersion: Config[] = [] as const;
 
 interface Config {
   lockVersion: number;
